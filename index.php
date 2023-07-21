@@ -1,6 +1,8 @@
 <?php
+    session_start();
+    $_SESSION["path_video"] = "video/video.mp4";
+    $_SESSION["name_file_video"] = "video.mp4";
     $file = "video.mp4";
-    
 ?>
 
 <!DOCTYPE html>
@@ -14,10 +16,10 @@
 
     <body>
         <video id = "<?php echo strtok($file, '.')?>" controls muted autoplay>
-            <source src="<?php echo $file?>" type="video/mp4">
+            <source src="<?php echo "video/" . $file?>" type="video/mp4">
         </video>
         <form action="screen.php" method="post">
-            <input type="text" name="ttime" id="ttile">
+            <input type="text" name="timing_video" id="timing_video" readonly>
             <input type="submit" value="Screen">
         </form>
     </body>
@@ -49,6 +51,6 @@
         stime = stime.split(".").pop();
         stime = stime.substr(0,3);
 
-        $('#ttile').val(fromSeconds(video[0].currentTime)+'.'+stime);
+        $('#timing_video').val(fromSeconds(video[0].currentTime)+':'+stime);
     });
 </script>
