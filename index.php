@@ -30,7 +30,7 @@ $filename = strtok($_SESSION["name_file_video"], '.');
 
 
     <div id="mark_details" hidden>
-        <form action="php/mark.php?" method="post">
+        <form action="php/mark.php" method="post">
             <fieldset>
                 <legend>Segnaposto</legend>
                 <label for="timing_mark">Timing:</label>
@@ -42,7 +42,7 @@ $filename = strtok($_SESSION["name_file_video"], '.');
                 <label for="mark_name">Descrizione:</label>
                 <textarea id="mark_note" name="mark_note" rows="2" cols="30"></textarea>
 
-                <input type="submit" value="Salva">
+                <input type="submit" value="Salva" onclick="document.getElementById('mark_details').hidden = true">
             </fieldset>
         </form>
     </div>
