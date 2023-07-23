@@ -4,17 +4,24 @@ session_start();
 require 'functions.php';
 require 'db_connection.php';
 
-$conn = get_connection();
-
-$ris = $conn->query("SELECT * FROM persone");
-//var_dump($ris);
-
-//devo studiare con calma come funziona la connessione e come si fanno le query
-
-$timing = $_POST["timing_mark"];
-$name = $_POST["mark_name"];
-$note = $_POST["mark_note"];
+$pdo = get_connection();
 
 if(isset($_GET["timing"])){
     echo $_GET["timing"];
+}
+
+if(isset($_POST["timing_mark"])){
+	$timing = $_POST["timing_mark"]; echo $timing;
+	$name = ($_POST["mark_name"] == "") ? null : $_POST["mark_name"];
+	$note = ($_POST["mark_note"] == "") ? null : $_POST["mark_note"];
+	$video = $_SESSION["path_video"];
+
+	$query = 'INSERT INTO segnaposti(minutaggio, video, nome, note) VALUES (:minutaggio, :video, :nome, :note)';
+	$statement = $pdo->prepare($query);
+	/*$statement->execute([
+		':minutaggio' => $timing,
+		':video' => $video,
+		':nome' => $name,
+		':note' => $note,
+	]);*/
 }

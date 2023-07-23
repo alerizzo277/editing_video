@@ -12,6 +12,7 @@ $filename = strtok($_SESSION["name_file_video"], '.');
 
 <head>
     <meta charset="utf-8">
+    <link rel="stylesheet" href="css/style.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="js/functions.js"></script>
     <title>Editing video</title>
@@ -77,6 +78,7 @@ $filename = strtok($_SESSION["name_file_video"], '.');
         stime = stime.toString();
         stime = stime.split(".").pop();
         stime = stime.substr(0, 3);
+
 
         $('#timing_video').val(fromSeconds(video[0].currentTime) + ':' + stime);
     });
