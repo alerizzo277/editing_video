@@ -26,28 +26,12 @@ $filename = strtok($_SESSION["name_file_video"], '.');
     <form action="php/screen.php" method="post">
         <input type="text" name="timing_video" id="timing_video" readonly>
         <input type="button" id="mark" onclick="segnaposto()" value="Aggiungi Segnaposto">
+        <input type="button" id="test" value="TEST" onclick="test1()">
         <input type="submit" value="Screen">
     </form>
 
 
-    <div id="mark_details" hidden>
-        <form action="php/mark.php" method="post">
-            <fieldset>
-                <legend>Segnaposto</legend>
-                <label for="timing_mark">Timing:</label>
-                <input type="text" name="timing_mark" id="timing_mark" readonly><br>
-
-                <label for="mark_name">Titolo:</label>
-                <input type="text" name="mark_name" id="mark_name"><br>
-
-                <label for="mark_name">Descrizione:</label>
-                <textarea id="mark_note" name="mark_note" rows="2" cols="30"></textarea>
-
-                <input type="submit" value="Salva" onclick="document.getElementById('mark_details').hidden = true">
-            </fieldset>
-        </form>
-    </div>
-
+    
     <div id="marks">
         <ul id="list_marks">
         </ul>
@@ -106,6 +90,12 @@ $filename = strtok($_SESSION["name_file_video"], '.');
             timing = parseFloat(timing);
             document.getElementById("<?php echo $filename?>").currentTime = timing;
         }
+    }
+
+    function test1() {
+        console.log("test");
+        document.getElementById("<?php echo $filename?>").currentTime = 4.035;
+        document.getElementById("<?php echo $filename?>").pause();
     }
 
 </script>
