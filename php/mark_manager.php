@@ -41,10 +41,13 @@ if(isset($_GET["operation"])){
 			}
 			break;
 		case "delete_mark":
-
+			if(isset($_GET["id"])){
+				$id = $_GET["id"];
+				deleteMarkFromId($pdo, $id);
+			}
 			break;
 	}
 	
 	$timing = getIntTimingScreen($_POST["timing_mark"]);
-	//header("Location: ../index.php?timing_screen=$timing");
+	header("Location: ../index.php?timing_screen=$timing");
 }

@@ -105,7 +105,7 @@ function timing_format_from_db_to_int($timing){
 /**
  * Restituisce i mark salvati nel db come vettore di istanse della classe Mark
  * @param PDO La connessione al db
- * @return array Un array di istane della classe Mark, che rappresentano i mark salvati nel db
+ * @return array Un array di istanze della classe Mark, che rappresentano i mark salvati nel db
  */
 function getMarks($pdo){
     $marks = array();
@@ -113,7 +113,7 @@ function getMarks($pdo){
     $name = "";
     $note = "";
 
-    $query = "SELECT id, minutaggio, nome, note FROM segnaposti";
+    $query = "SELECT id, minutaggio, nome, nota FROM segnaposti";
     $statement = $pdo->query($query);
     $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
     if ($publishers) {
@@ -122,7 +122,7 @@ function getMarks($pdo){
                 $id = $publisher['id'];
                 $timing = $publisher['minutaggio'];
                 $name = $publisher['nome'];
-                $note = $publisher['note'];
+                $note = $publisher['nota'];
                 $mark = new Mark($timing, $name, $note, null, $id);
                 array_push($marks, $mark);
             } catch (Exception $e) {
@@ -142,7 +142,7 @@ function getMarks($pdo){
  */
 function getMarkFromId($pdo, $id){
     $mark = null;
-    $query = "SELECT * FROM segnaposti WHERE id={$_GET["id"]}";
+    $query = "SELECT * FROM segnaposti WHERE id=$id";
     $statement = $pdo->query($query);
     $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
     if ($publishers) {
@@ -151,7 +151,7 @@ function getMarkFromId($pdo, $id){
                 $id = $publisher['id'];
                 $timing = $publisher['minutaggio'];
                 $name = $publisher['nome'];
-                $note = $publisher['note'];
+                $note = $publisher['nota'];
                 $mark = new Mark($timing, $name, $note, null, $id);
             } catch (Exception $e) {
                 echo 'Eccezione: ',  $e->getMessage(), "\n";
@@ -171,7 +171,7 @@ function getMarkFromId($pdo, $id){
 function insertNewMark($pdo, $mark){
     $ris = null;
     try{
-        $query = 'INSERT INTO segnaposti(minutaggio, video, nome, note) VALUES (:minutaggio, :video, :nome, :note)';
+        $query = 'INSERT INTO segnaposti(minutaggio, video, nome, nota) VALUES (:minutaggio, :video, :nome, :note)';
         $statement = $pdo->prepare($query);
         $ris = $statement->execute([
             ':minutaggio' => $mark->getTiming(),
@@ -191,14 +191,82 @@ function insertNewMark($pdo, $mark){
  */
 function updateMarkFromId($pdo, $mark){
     
-   $query = "UPDATE segnaposti SET minutaggio=:minutaggio, nome=:nome, note=:note WHERE id=:id";
+   $query = "UPDATE segnaposti SET minutaggio=:minutaggio, nome=:nome, nota=:nota WHERE id=:id";
    $statement = $pdo->prepare($query);
    $ris = $statement->execute([
        ':minutaggio' => $mark->getTiming(),
        ':nome' => $mark->getName(),
-       ':note' => $mark->getNote(),
+       ':nota' => $mark->getNote(),
        ':id' => $mark->getId(),
     ]);
     
    return $ris;
+}
+
+/**
+ * Elimina il segnaposto dal db con l'id specificato
+ * @param PDO La connessione al db
+ * @param integer $id indica l'id del segnaposto
+ */
+function deleteMarkFromId($pdo, $id){
+    $query = "DELETE FROM segnaposti WHERE id = \"$id\"";
+    $pdo->query($query);
+}
+
+/**
+ * Restituisce i mark salvati nel db come vettore di istanse della classe Mark
+ * @param PDO La connessione al db
+ * @return array Un array di istanze della classe Screen, che rappresentano gli screenshots salvati nel db
+ */
+function getScreenshots($pdo){
+    $screenshots = array();
+    $query = "SELECT * FROM screenshots";
+    $statement = $pdo->query($query);
+    $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
+    if ($publishers) {
+        foreach ($publishers as $publisher) {
+            try{                
+                $id = $publisher['id'];
+                $path = $publisher['locazione'];
+                $name = $publisher['nome'];
+                $note = $publisher['nota'];
+                $path_video = $publisher['video'];
+                $screen = new Screen($path, $name, $note, $id, $path_video);
+                array_push($screenshots, $screen);
+            } catch (Exception $e) {
+                echo 'Eccezione: ',  $e->getMessage(), "\n";
+            }
+        }
+    }
+
+    return $screenshots;
+}
+
+/**
+ * Restituisce uno screen salvato nel db con l'id specificato
+ * @param PDO La connessione al db
+ * @param integer $id l'id che identifica lo screen
+ * @return Screem lo screen cercato, come istanza della classe Screen
+ */
+function getScreenfromId($pdo, $id){
+    $screen = null;
+    $query = "SELECT * FROM screenshots WHERE id=$id";
+    $statement = $pdo->query($query);
+    $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
+    if ($publishers) {
+        foreach ($publishers as $publisher) {
+            try{                
+                $id = $publisher['id'];
+                $path = $publisher['locazione'];
+                $name = $publisher['nome'];
+                $note = $publisher['nota'];
+                $path_video = $publisher['video'];
+                $screen = new Screen($path, $name, $note, $id, $path_video);
+            } catch (Exception $e) {
+                echo 'Eccezione: ',  $e->getMessage(), "\n";
+            }
+        }
+    }
+
+    return $screen;
 }

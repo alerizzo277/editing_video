@@ -30,7 +30,7 @@ if(isset($_GET["id"])){
                 <textarea id="mark_note" name="mark_note" rows="2" cols="30">{$mark->getNote()}</textarea>
 
                 <input type="submit" value="Salva">
-                <input type="submit" value="Elmina" formaction="php/mark_manager.php?operation=delete_mark">
+                <input type="submit" value="Elmina" formaction="mark_manager.php?operation=delete_mark&id={$mark->getId()}">
             </fieldset>
         </form>
     </div>

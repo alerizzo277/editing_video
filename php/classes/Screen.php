@@ -5,16 +5,16 @@ class Screen {
     private $path;
     private $name;
     private $note;
+    private $path_video;
 
-    public function __construct($id, $path, $name, $note) {
-        $this->id = $id;
+    public function __construct($path, $name, $note, $id = null, $path_video = null) {
         $this->path = $path;
         $this->name = $name;
         $this->note = $note;
+        $this->path_video = $path_video;
+        $this->id = $id;
     }
     
-    
-
     /**
      * Get the value of id
      */
@@ -83,6 +83,24 @@ class Screen {
     public function setNote($note): self
     {
         $this->note = $note;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of path_video
+     */
+    public function getPathVideo()
+    {
+        return $this->path_video;
+    }
+
+    /**
+     * Set the value of path_video
+     */
+    public function setPathVideo($path_video): self
+    {
+        $this->path_video = $path_video;
 
         return $this;
     }

@@ -4,6 +4,7 @@ session_start();
 include 'php/db_connection.php';
 include 'php/functions.php';
 include 'php/classes/Mark.php';
+include 'php/classes/Screen.php';
 
 $_SESSION["path_video"] = "video/video.mp4";
 $_SESSION["name_file_video"] = "video.mp4";
@@ -87,14 +88,24 @@ $pdo = get_connection();
 
     <div id="screen_area">
         <?php
-        //da sostituioreì con la query al db
-        foreach (glob('screen/*.*') as $img_path) {
-            $imgname = substr($img_path, strpos($img_path, "/") + 1);
-            echo "<div class=\"mini_screen\" id=\"$imgname\">";
-            echo "\t<img id=\"$imgname\" src=\"$img_path\" alt=\"$imgname\" width=\"426\" height=\"240\"><br>";
-            echo "\t<label>$imgname</label>";
-            echo "</div>";
-        }
+            $screenshots = getScreenshots($pdo);
+            try{
+                foreach ($screenshots as $el){
+                    $img_name = substr($el->getPath(), strpos($el->getPath(), "/") + 1);
+                    echo <<< END
+                        <div class="screen">
+                            <a href="php/screen_details.php?id={$el->getId()}">
+                                <img id="{$el->getId()}" src="{$el->getPath()}" alt="$img_name" width="426" height="240">
+                            </a>
+                            <br>
+                            <a href="php/screen_details.php?id={$el->getId()}\">
+                    END;
+                    echo ($el->getName() == null) ? $img_name : $el->getName();
+                    echo "</a>\n\t</div>\n";
+                }
+            } catch (Exception $e) {
+                echo 'Eccezione: ',  $e->getMessage(), "\n";
+            }
         ?>
     </div>
 
