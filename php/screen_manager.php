@@ -1,9 +1,9 @@
 <?php
 session_start();
 
-require '../vendor/autoload.php';
-require 'functions.php';
-require 'db_connection.php';
+include '../vendor/autoload.php';
+include 'functions.php';
+include 'db_connection.php';
 
 $path_video = "../" . $_SESSION["path_video"];
 $filename = $_SESSION["name_file_video"];
@@ -35,5 +35,3 @@ $statement->execute([
 ]);
 
 header("Location: ../index.php?timing_screen=$timing_screen");
-
-?>
