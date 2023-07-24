@@ -123,7 +123,7 @@ function getMarks($pdo){
                 $timing = $publisher['minutaggio'];
                 $name = $publisher['nome'];
                 $note = $publisher['note'];
-                $mark = new Mark($timing, $name, $note, $id);
+                $mark = new Mark($timing, $name, $note, null, $id);
                 array_push($marks, $mark);
             } catch (Exception $e) {
                 echo 'Eccezione: ',  $e->getMessage(), "\n";
@@ -152,7 +152,7 @@ function getMarkFromId($pdo, $id){
                 $timing = $publisher['minutaggio'];
                 $name = $publisher['nome'];
                 $note = $publisher['note'];
-                $mark = new Mark($timing, $name, $note, $id);
+                $mark = new Mark($timing, $name, $note, null, $id);
             } catch (Exception $e) {
                 echo 'Eccezione: ',  $e->getMessage(), "\n";
             }

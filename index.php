@@ -39,6 +39,7 @@ $pdo = get_connection();
         <form action="php/mark_manager.php?operation=new_mark" method="post">
             <fieldset>
                 <legend>Segnaposto</legend>
+                
                 <label for="timing_mark">Timing:</label>
                 <input type="text" name="timing_mark" id="timing_mark" readonly><br>
 
