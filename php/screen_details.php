@@ -4,10 +4,59 @@ session_start();
 include 'db_connection.php';
 include 'functions.php';
 include 'classes/Screen.php';
+?>
 
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="../css/style.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="../js/functions.js"></script>
+        <title>Dettagli Screen</title>
+        <h1>Dettagli Screen</h1>
+    </head>
+    <body>
+        <a href="../index.php">Home</a><br>
+
+<?php
 $pdo = get_connection();
 
 if(isset($_GET["id"])){
     $screen = getScreenfromId($pdo, $_GET["id"]);
-    var_dump($screen);
+    if($screen != null){
+        echo <<< END
+            <div class="screen_details">
+                <img id="{$screen->getId()}" src="../{$screen->getPath()}" alt="img">
+                <form action="screen_manager.php?operation=update_screen&id={$screen->getId()}" method="post">
+                <fieldset>
+                    <legend>Dettagli Screenshot</legend>
+                    
+                    <label for="screen_name">Nome:</label>
+                    <input type="text" name="screen_name" id="screen_name" value="{$screen->getName()}"><br>
+
+                    <label for="screen_note">Descrizione:</label>
+                    <textarea id="screen_note" name="screen_note" rows="2" cols="30">{$screen->getNote()}</textarea>
+
+                    <input type="submit" value="Salva">
+                    <input type="submit" value="Elmina" formaction="screen_manager.php?operation=delete_screen&id={$screen->getId()}">
+                </fieldset>
+            </form>
+            </div>
+        END;
+    }
+    else{
+        echo "<p id=\"screen_mess\">Screenshot non trovato</p>";
+    }
 }
+?>
+    </body>
+</html>
+
+<script>
+    let screen_deleted = findGetParameter("screen_deleted");
+    console.log(screen_deleted);
+    if(screen_deleted != null){
+        document.write("<p><b>Screenshot eliminato correttamente</b></p>");
+    }
+</script>

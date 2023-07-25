@@ -7,7 +7,6 @@ include 'classes/Mark.php';
 
 $pdo = get_connection();
 
-
 if(isset($_GET["timing"])){
     echo $_GET["timing"];
 }

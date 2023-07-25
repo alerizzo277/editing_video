@@ -29,12 +29,17 @@ $pdo = get_connection();
     <video id="<?php echo $filename ?>" controls muted autoplay>
         <source src="<?php echo $_SESSION["path_video"] ?>" type="video/mp4">
     </video>
-    <form action="php/screen_manager.php" method="post">
+    <form action="php/screen_manager.php?operation=get_screen" method="post">
         <input type="text" name="timing_video" id="timing_video" readonly>
         <input type="button" id="mark" onclick="segnaposto()" value="Aggiungi Segnaposto">
         <input type="submit" value="Screen">
     </form>
 
+    <from action="php/clip_manager.php" method="post">
+        <input type="submit" value="Estrai Clip">
+    </from>
+
+    </from>
 
     <div id="mark_details" hidden>
         <form action="php/mark_manager.php?operation=new_mark" method="post">
@@ -56,14 +61,13 @@ $pdo = get_connection();
     </div>
 
     <div id="marks">
-        <table id="list_marks">
+        <table id="list_marks" class="paleBlueRows">
             <tr>
                 <th>Minutaggio</th>
                 <th>Nome</th>
             </tr>
                 <?php
-                    //verisone grezza devo aggiungere vedi dettagli e elimina, rinomina ecc.
-                    $marks = getMarks($pdo);
+                    $marks = getMarksFromVideo($pdo, $_SESSION["path_video"]);
                     try{
                         if ($marks != null){    
                             foreach ($marks as $el){
@@ -86,19 +90,21 @@ $pdo = get_connection();
         </table>       
     </div>
 
-    <div id="screen_area">
+    <h2>Screenshots</h2>
+
+    <div id="screen_area" class="grid-container">
         <?php
-            $screenshots = getScreenshots($pdo);
+            $screenshots = getScreenshotsFromVideo($pdo, $_SESSION["path_video"]);
             try{
                 foreach ($screenshots as $el){
                     $img_name = substr($el->getPath(), strpos($el->getPath(), "/") + 1);
                     echo <<< END
-                        <div class="screen">
+                        <div class="grid-item">
                             <a href="php/screen_details.php?id={$el->getId()}">
                                 <img id="{$el->getId()}" src="{$el->getPath()}" alt="$img_name" width="426" height="240">
                             </a>
                             <br>
-                            <a href="php/screen_details.php?id={$el->getId()}\">
+                            <a href="php/screen_details.php?id={$el->getId()}&timing_video="">
                     END;
                     echo ($el->getName() == null) ? $img_name : $el->getName();
                     echo "</a>\n\t</div>\n";

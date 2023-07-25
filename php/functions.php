@@ -107,13 +107,9 @@ function timing_format_from_db_to_int($timing){
  * @param PDO La connessione al db
  * @return array Un array di istanze della classe Mark, che rappresentano i mark salvati nel db
  */
-function getMarks($pdo){
+function getMarksFromVideo($pdo, $video){
     $marks = array();
-    $timing = "";
-    $name = "";
-    $note = "";
-
-    $query = "SELECT id, minutaggio, nome, nota FROM segnaposti";
+    $query = "SELECT * FROM segnaposti WHERE video=\"$video\"";
     $statement = $pdo->query($query);
     $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
     if ($publishers) {
@@ -123,7 +119,8 @@ function getMarks($pdo){
                 $timing = $publisher['minutaggio'];
                 $name = $publisher['nome'];
                 $note = $publisher['nota'];
-                $mark = new Mark($timing, $name, $note, null, $id);
+                $video = $publisher['video'];
+                $mark = new Mark($timing, $name, $note, $video, $id);
                 array_push($marks, $mark);
             } catch (Exception $e) {
                 echo 'Eccezione: ',  $e->getMessage(), "\n";
@@ -216,11 +213,12 @@ function deleteMarkFromId($pdo, $id){
 /**
  * Restituisce i mark salvati nel db come vettore di istanse della classe Mark
  * @param PDO La connessione al db
+ * @param string Il percorso del video
  * @return array Un array di istanze della classe Screen, che rappresentano gli screenshots salvati nel db
  */
-function getScreenshots($pdo){
+function getScreenshotsFromVideo($pdo, $path_video){
     $screenshots = array();
-    $query = "SELECT * FROM screenshots";
+    $query = "SELECT * FROM screenshots WHERE video=\"$path_video\"";
     $statement = $pdo->query($query);
     $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
     if ($publishers) {
@@ -269,4 +267,33 @@ function getScreenfromId($pdo, $id){
     }
 
     return $screen;
+}
+
+/**
+ * Aggiorna uno screen nel db con l'id specificato nell'istanza della classe Screen
+ * @param PDO La connessione al db
+ * @param Screen $screen Istanza della classe Screen, che contiene i valori da aggiornare
+ * @return bool true se l'aggiornamento ha successo, altrimenti false
+ */
+function updateScreenFromId($pdo, $screen){
+    $query = "UPDATE screenshots SET nome=:nome, nota=:nota WHERE id=:id";
+    $statement = $pdo->prepare($query);
+    $ris = $statement->execute([
+        ':nome' => $screen->getName(),
+        ':nota' => $screen->getNote(),
+        ':id' => $screen->getId(),
+     ]);
+
+     return $ris;
+}
+
+
+/**
+ * Elimina lo screen dal db con l'id specificato
+ * @param PDO La connessione al db
+ * @param integer $id indica l'id dello screen
+ */
+function deleteScreenFromId($pdo, $id){
+    $query = "DELETE FROM screenshots WHERE id = \"$id\"";
+    $pdo->query($query);
 }
