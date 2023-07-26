@@ -41,6 +41,8 @@ $pdo = get_connection();
 
     </from>
 
+    <br><a href="php/marks_list.php">Segnaposti</a>
+
     <div id="mark_details" hidden>
         <form action="php/mark_manager.php?operation=new_mark" method="post">
             <fieldset>
@@ -90,7 +92,7 @@ $pdo = get_connection();
         </table>       
     </div>
 
-    <h2>Screenshots</h2>
+    <br><a href="php/screenshots_list.php">Screenshots</a>
 
     <div id="screen_area" class="grid-container">
         <?php

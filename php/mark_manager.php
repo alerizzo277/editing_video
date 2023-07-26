@@ -45,8 +45,27 @@ if(isset($_GET["operation"])){
 				deleteMarkFromId($pdo, $id);
 			}
 			break;
+		case "multiple_mark_delete":
+			if(isset($_POST["id"])){
+				multipleDelete($pdo);
+			}
+			break;
+		default:
+			echo "<p>Opzione non riconosciuta</p>";
+			echo "<a href=\"../index.php\">Home</a>";
+			break;
 	}
-	
-	$timing = getIntTimingScreen($_POST["timing_mark"]);
-	header("Location: ../index.php?timing_screen=$timing");
+
+	$tmp = "";
+	if(isset($_POST["timing_mark"])){
+		$timing = getIntTimingScreen($_POST["timing_mark"]);
+		$tmp = "?timing_screen=$timing";
+	}
+	header("Location: ../index.php$tmp");
+}
+
+function multipleDelete($pdo){
+	foreach($_POST["id"] as $el){
+		deleteMarkFromId($pdo, $el);
+	}
 }

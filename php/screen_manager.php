@@ -36,6 +36,12 @@ if(isset($_GET["operation"])){
             }
             header("Location: ./screen_details.php?id={$_GET["id"]}&screen_deleted=true");
             break;
+        case "multiple_screen_delete":
+            if(isset($_POST["id"])){
+                multipleDelete($pdo);
+            }
+            header("Location: ../index.php");
+            break;
 
     }
 }
@@ -48,11 +54,13 @@ function getScreen($path_video, $filename, $timing_screen, $timing_screen_string
     $video
         ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds($timing_screen))
         ->save("../" . $screen_name);
-
-    $query = 'INSERT INTO screenshots(locazione, video) VALUES (:locazione, :video)';
+     
+    $img_name = substr($screen_name, strpos($screen_name, "/") + 1);
+    $query = 'INSERT INTO screenshots(locazione, nome, video) VALUES (:locazione, :nome, :video)';
     $statement = $pdo->prepare($query);
     $statement->execute([
         ':locazione' => $screen_name,
+        ':nome' => $img_name,
         ':video' => $_SESSION["path_video"],
     ]);
 }
@@ -66,5 +74,21 @@ function updateScreen($pdo){
 }
 
 function deleteScreen($pdo, $id){
+    $path_screen = "";
+    $query = "SELECT locazione FROM screenshots WHERE id=$id";
+    $statement = $pdo->query($query);
+    $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
+    if ($publishers) {
+        foreach ($publishers as $publisher) {
+            $path_screen = $publisher['locazione'];
+        }
+    }
     deleteScreenFromId($pdo, $id);
+    unlink("../$path_screen");
+}
+
+function multipleDelete($pdo){
+    foreach($_POST["id"] as $el){
+        deleteScreen($pdo, $el);
+    }
 }

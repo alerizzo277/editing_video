@@ -17,7 +17,7 @@ include 'classes/Screen.php';
         <h1>Dettagli Screen</h1>
     </head>
     <body>
-        <a href="../index.php">Home</a><br>
+        <a href="../index.php"><h2>Home</h2></a><br>
 
 <?php
 $pdo = get_connection();
@@ -44,19 +44,25 @@ if(isset($_GET["id"])){
             </form>
             </div>
         END;
+        if(isset($_GET["updated"])){
+            echo "<div id=\"snackbar\" class=\"show\">Screenshot modificato correttamente</div>";
+        }  
     }
     else{
-        echo "<p id=\"screen_mess\">Screenshot non trovato</p>";
-    }
+        if(!isset($_GET["screen_deleted"])){
+            echo "<p id=\"screen_mess\">Screenshot non trovato</p>";
+        }     
+        else {
+            header("Location: ../index.php");
+        }
+    } 
 }
 ?>
     </body>
 </html>
 
 <script>
-    let screen_deleted = findGetParameter("screen_deleted");
-    console.log(screen_deleted);
-    if(screen_deleted != null){
-        document.write("<p><b>Screenshot eliminato correttamente</b></p>");
+    if (findGetParameter("updated") != null){  
+        window.onload = showSnackbar();
     }
 </script>

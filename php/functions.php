@@ -187,11 +187,10 @@ function insertNewMark($pdo, $mark){
  * @return bool true se l'aggiornamento ha successo, altrimenti false
  */
 function updateMarkFromId($pdo, $mark){
-    
-   $query = "UPDATE segnaposti SET minutaggio=:minutaggio, nome=:nome, nota=:nota WHERE id=:id";
+    var_dump($mark); echo"<br>";
+   $query = "UPDATE segnaposti SET nome=:nome, nota=:nota WHERE id=:id";
    $statement = $pdo->prepare($query);
    $ris = $statement->execute([
-       ':minutaggio' => $mark->getTiming(),
        ':nome' => $mark->getName(),
        ':nota' => $mark->getNote(),
        ':id' => $mark->getId(),
