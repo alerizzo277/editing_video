@@ -35,11 +35,7 @@ $pdo = get_connection();
         <input type="submit" value="Screen">
     </form>
 
-    <from action="php/clip_manager.php" method="post">
-        <input type="submit" value="Estrai Clip">
-    </from>
-
-    </from>
+    <br><a href="php/clip_manager.php">Estrai Clip</a><br>
 
     <br><a href="php/marks_list.php">Segnaposti</a>
 

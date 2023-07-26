@@ -40,7 +40,7 @@ if(isset($_GET["operation"])){
             if(isset($_POST["id"])){
                 multipleDelete($pdo);
             }
-            header("Location: ../index.php");
+            header("Location: ./screenshots_list.php");
             break;
 
     }

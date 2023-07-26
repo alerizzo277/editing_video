@@ -29,7 +29,48 @@ function findGetParameter(parameterName) {
 
 function showSnackbar() {
     var x = document.getElementById("snackbar");
-    console.log(x);
-    //x.className = "show";
+    //console.log(x);
+    x.className = "show";
     setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+
+function getNumberTimingScreen(timing_screen){
+    let ris = 0.0;
+    let vet_timing = Array();
+    substr = timing_screen.split(":");
+    substr.forEach(element => {
+        vet_timing.push(parseInt(element)); 
+    });
+    ris = vet_timing[0] * 60 + vet_timing[1] + vet_timing[2] / 1000;
+
+    return ris;
+}
+
+function getStartTimingTrim(){
+    timing = document.getElementById("timing_video");
+    start_trim = document.getElementById("start_timing_trim");
+    start_trim.value = timing.value;
+    end_trim = document.getElementById("end_timing_trim");
+    checkTrimTime(start_trim, end_trim);
+}
+
+function getEndTimingTrim(){
+    timing = document.getElementById("timing_video");
+    start_trim = document.getElementById("start_timing_trim");
+    end_trim = document.getElementById("end_timing_trim");
+    end_trim.value = timing.value;
+    checkTrimTime(start_trim, end_trim);
+}
+
+function checkTrimTime(start_trim, end_trim){
+    if (start_trim != '' && end_trim != ''){
+        let st = getNumberTimingScreen(start_trim.value);
+        let et = getNumberTimingScreen(end_trim.value);
+        console.log(st);
+        console.log(et);
+        console.log(st > et);
+        if (st > et){
+            showSnackbar();
+        }
+    }
 }
