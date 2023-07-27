@@ -66,11 +66,19 @@ function checkTrimTime(start_trim, end_trim){
     if (start_trim != '' && end_trim != ''){
         let st = getNumberTimingScreen(start_trim.value);
         let et = getNumberTimingScreen(end_trim.value);
-        console.log(st);
-        console.log(et);
-        console.log(st > et);
         if (st > et){
             showSnackbar();
+            disableTrim(true);
+        }
+        else{
+            disableTrim(false);
         }
     }
+    else{
+        disableTrim(true);
+    }
+}
+
+function disableTrim(disabled){
+    document.getElementById("trim_video").disabled = disabled;
 }

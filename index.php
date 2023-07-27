@@ -6,6 +6,7 @@ include 'php/functions.php';
 include 'php/classes/Mark.php';
 include 'php/classes/Screen.php';
 
+$_SESSION["email_user"] = "vincenzo.italiano@gmail.com";
 $_SESSION["path_video"] = "video/video.mp4";
 $_SESSION["name_file_video"] = "video.mp4";
 $_SESSION["screen_html"] = "";
@@ -35,7 +36,7 @@ $pdo = get_connection();
         <input type="submit" value="Screen">
     </form>
 
-    <br><a href="php/clip_manager.php">Estrai Clip</a><br>
+    <br><a href="php/clip.php">Estrai Clip</a><br>
 
     <br><a href="php/marks_list.php">Segnaposti</a>
 

@@ -1,5 +1,9 @@
 <?php
 
+function getFilenameNoExtention($filename){
+    return strtok($filename, '.');
+}
+
 /**
  * converte il timing del video indicato dall'appostio box nel browser in un intero
  * @param string $timing_screen La stringa è nel formato 00:00:000 (minuti:secondi:millesimi di secondi)
@@ -176,7 +180,7 @@ function insertNewMark($pdo, $mark){
             ':nome' => $mark->getName(),
             ':note' => $mark->getNote(),
         ]);
-    } catch (Exception $e){}
+    } catch (Exception $e){echo "Eccezione:" . $e->getMessage();}
     return $ris;
 }
 
@@ -286,7 +290,6 @@ function updateScreenFromId($pdo, $screen){
      return $ris;
 }
 
-
 /**
  * Elimina lo screen dal db con l'id specificato
  * @param PDO La connessione al db
@@ -295,4 +298,78 @@ function updateScreenFromId($pdo, $screen){
 function deleteScreenFromId($pdo, $id){
     $query = "DELETE FROM screenshots WHERE id = \"$id\"";
     $pdo->query($query);
+}
+
+
+
+/**
+ * Inserisce nel db un nuovo video
+ * @param PDO La connessione al db
+ * @param Video $video Istanza della classe Video, che contiene i valori da inserie
+ * @return bool true se l'inserimento ha successo, altrimenti false
+ */
+function insertNewVideo($pdo, $video){
+    $ris = null;
+    try{
+        $query = 'INSERT INTO video(locazione, nome, autore, nota) VALUES (:locazione, :nome, :autore, :nota)';
+        $statement = $pdo->prepare($query);
+        $ris = $statement->execute([
+            ':locazione' => $video->getPath(),
+            ':nome' => $video->getName(),
+            ':autore' => $video->getAuthor(),
+            ':nota' => $video->getNote(),
+        ]);
+    } catch (Exception $e){echo "Eccezione:" . $e->getMessage();}
+
+    return $ris;
+}
+
+/**
+ * @param PDO La connessione al db
+ * @param Video $video Istanza della classe Video, che contiene i valori da inserie
+ * @param string $path_original_video locazione del video da cui è stata estratta la clip
+ * @return bool true se l'inserimento ha successo, altrimenti false
+ */
+function insertNewClip($pdo, $clip, $path_original_video){
+    $ris = null;
+    if(insertNewVideo($pdo, $clip)){
+        try{
+            $query = 'INSERT INTO clips_video(locazione_video_originale, locazione_clip) VALUES (:originale, :clip)';
+            $statement = $pdo->prepare($query);
+            $ris = $statement->execute([
+                ':originale' => $path_original_video,
+                ':clip' => $clip->getPath(),
+            ]);
+        } catch (Exception $e){echo "Eccezione:" . $e->getMessage();}
+    }
+
+    return $ris;
+}
+
+/**
+ * @param PDO La connessione al db
+ * @param string $path_video locazione del video originale da cui estrarre le clip
+ * @return array array con le istanse dei video, della classe Video
+ */
+function getClipsFromVideo($pdo, $path_video){
+    $videos = array();
+    $query = "SELECT V.locazione, V.nome, V.autore, V.nota FROM video V INNER JOIN clips_video CV ON V.locazione = CV.locazione_clip WHERE CV.locazione_video_originale = \"path_original_video\"";
+    $statement = $pdo->query($query);
+    $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
+    if ($publishers) {
+        foreach ($publishers as $publisher) {
+            try{                
+                $path = $publisher['locazione'];
+                $name = $publisher['nome'];
+                $author = $publisher['autore'];
+                $note = $publisher['nota'];
+                $video = new Video($path, $name, $note, $author);
+                array_push($videos, $video);
+            } catch (Exception $e) {
+                echo 'Eccezione: ',  $e->getMessage(), "\n";
+            }
+        }
+    }
+
+    return $videos;
 }

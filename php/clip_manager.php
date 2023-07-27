@@ -1,46 +1,49 @@
 <?php
 session_start();
-$filename = strtok($_SESSION["name_file_video"], '.');
-?>
 
-<!DOCTYPE html>
-<html>
+include '../vendor/autoload.php';
+include 'functions.php';
+include 'db_connection.php';
+include 'classes/Video.php';
 
-<head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="../css/style.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="../js/functions.js"></script>
-    <title>Clip video</title>
-    <h1>Clip video</h1>
-</head>
 
-<body>
-    <a href="../index.php">Home</a><br>
-    <video id="<?php echo $filename ?>" controls muted autoplay>
-            <source src="<?php echo "../" . $_SESSION["path_video"] ?>" type="video/mp4">
-    </video>
-    <form action="" method="post">
-        <input type="text" name="timing_video" id="timing_video" readonly><br>
-        <label>Timing inizio clip: </label><input type="text" name="start_timing_trim" id="start_timing_trim" readonly>
-        <input type="button" onclick="getStartTimingTrim()" value="Prendi tempo iniziale"><br>
-        <label>Timing fine clip: </label><input type="text" name="end_timing_trim" id="end_timing_trim" readonly>
-        <input type="button" onclick="getEndTimingTrim()" value="Prendi tempo finale"><br>
-    </form>
-</body>
+$pdo = get_connection();
 
-<div id="snackbar" class>Il tempo iniziale deve essere maggiore al tempo finale</div>
+if (isset($_POST["start_timing_trim"]) && isset($_POST["end_timing_trim"])){
+    $start = $_POST["start_timing_trim"];
+    $end = $_POST["end_timing_trim"];
 
-<script>
-    //timing video a tempo reale
-    var video = $('#<?php echo $filename ?>');
-    video.bind("timeupdate", function() {
+    $start_number = getIntTimingScreen($start);
+    $end_number = getIntTimingScreen($end);
 
-        var stime = video[0].currentTime;
-        stime = stime.toString();
-        stime = stime.split(".").pop();
-        stime = stime.substr(0, 3);
+    $start = str_replace(":", "", $start);
+    $end = str_replace(":", "", $end);
+    $filename = getFilenameNoExtention($_SESSION["name_file_video"]);
+    $clip_name = "clip_$filename"."_$start"."_$end.mp4";
 
-        $('#timing_video').val(fromSeconds(video[0].currentTime) + ':' + stime);
-    });
-</script>
+    getClip($pdo, $start_number, $end_number, $clip_name);
+
+    header("Location: ./clip.php?clip=$clip_name");
+}
+
+
+/**
+ * @param float $start Il minutaggio iniziale per estrarre clip
+ * @param float $end Il minutaggio finale per estrarre clip
+ * @param string $clip_name nome della clip, inclusa di estensione
+ **/
+function getClip($pdo, $start, $end, $clip_name){
+    $clip_path = "video/$clip_name";
+    try{
+        $ffmpeg = FFMpeg\FFMpeg::create();
+        $video = $ffmpeg->open("../{$_SESSION["path_video"]}");
+        $clip = $video->clip(FFMpeg\Coordinate\TimeCode::fromSeconds($start), FFMpeg\Coordinate\TimeCode::fromSeconds($end-$start));
+        $clip->save(new FFMpeg\Format\Video\X264(), "../$clip_path");
+    } catch (Exception $e) {echo 'Eccezione: ',  $e->getMessage(), "\n";}
+
+
+    //$autore = $_SESSION["email_user"];
+    $autore = "vincenzo.italiano@gmail.com";
+    $video = new Video($clip_path, getFilenameNoExtention($clip_name), "Clip del video{$_SESSION["path_video"]}", $autore);
+    return insertNewClip($pdo, $video, $_SESSION["path_video"]);
+}
