@@ -7,7 +7,8 @@ class Video {
     private $author;
     private $note;
 
-    public function __construct($path, $name, $note, $author) {
+    public function __construct($id, $path, $name, $note, $author) {
+        $this->id = $id;
         $this->path = $path;
         $this->name = $name;
         $this->note = $note;

@@ -1,6 +1,13 @@
 <?php
 session_start();
+
+include 'db_connection.php';
+include 'functions.php';
+include 'classes/Video.php';
+
 $filename = strtok($_SESSION["name_file_video"], '.');
+$pdo = get_connection();
+
 ?>
 
 <!DOCTYPE html>
@@ -18,9 +25,17 @@ $filename = strtok($_SESSION["name_file_video"], '.');
 <body>
     <a href="../index.php">Home</a><br>
     <video id="<?php echo $filename ?>" controls muted autoplay>
-            <source src="<?php echo "../" . $_SESSION["path_video"] ?>" type="video/mp4">
+            <source src="
+            <?php
+                if(isset($_GET["id"])){
+                    $id = intval($_GET["id"]);
+                    $video = getVideoFromId($pdo, $id);              
+                    echo "../" .  $video->getPath();
+                }
+            ?>
+            " type="video/mp4">
     </video>
-    <form action="clip_manager.php" method="post">
+    <form action="clip_manager.php?operation=new_clip" method="post">
         <input type="text" name="timing_video" id="timing_video" readonly><br>
         <label>Timing inizio clip: </label><input type="text" name="start_timing_trim" id="start_timing_trim" readonly>
         <input type="button" onclick="getStartTimingTrim()" value="Prendi tempo iniziale"><br>

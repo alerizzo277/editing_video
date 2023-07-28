@@ -5,6 +5,7 @@ include 'php/db_connection.php';
 include 'php/functions.php';
 include 'php/classes/Mark.php';
 include 'php/classes/Screen.php';
+include 'php/classes/Video.php';
 
 $_SESSION["email_user"] = "vincenzo.italiano@gmail.com";
 $_SESSION["path_video"] = "video/video.mp4";
@@ -36,7 +37,14 @@ $pdo = get_connection();
         <input type="submit" value="Screen">
     </form>
 
-    <br><a href="php/clip.php">Estrai Clip</a><br>
+    <br><a 
+    <?php
+        $video = getVideoFromPath($pdo, $_SESSION["path_video"]);
+        if($video != null){echo "href=\"php/clip.php?id={$video->getId()}\"";}
+    ?>
+    >Estrai Clip</a><br>
+
+    <br><a href="php/clips_list.php">Clips</a><br>
 
     <br><a href="php/marks_list.php">Segnaposti</a>
 

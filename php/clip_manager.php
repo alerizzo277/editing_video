@@ -9,21 +9,38 @@ include 'classes/Video.php';
 
 $pdo = get_connection();
 
-if (isset($_POST["start_timing_trim"]) && isset($_POST["end_timing_trim"])){
-    $start = $_POST["start_timing_trim"];
-    $end = $_POST["end_timing_trim"];
 
-    $start_number = getIntTimingScreen($start);
-    $end_number = getIntTimingScreen($end);
+if(isset($_GET["operation"])){
+    switch($_GET["operation"]){
+        case "new_clip":
+            if (isset($_POST["start_timing_trim"]) && isset($_POST["end_timing_trim"])){
+                $start = $_POST["start_timing_trim"];
+                $end = $_POST["end_timing_trim"];
 
-    $start = str_replace(":", "", $start);
-    $end = str_replace(":", "", $end);
-    $filename = getFilenameNoExtention($_SESSION["name_file_video"]);
-    $clip_name = "clip_$filename"."_$start"."_$end.mp4";
+                $start_number = getIntTimingScreen($start);
+                $end_number = getIntTimingScreen($end);
 
-    getClip($pdo, $start_number, $end_number, $clip_name);
+                $start = str_replace(":", "", $start);
+                $end = str_replace(":", "", $end);
+                $filename = getFilenameNoExtention($_SESSION["name_file_video"]);
+                $clip_name = "clip_$filename"."_$start"."_$end.mp4";
 
-    header("Location: ./clip.php?clip=$clip_name");
+                getClip($pdo, $start_number, $end_number, $clip_name);
+
+                header("Location: ./clip.php?clip=$clip_name");
+            }
+            break;  
+        case "multiple_clip_delete":
+                if(isset($_POST["id"])){
+                    multipleDelete($pdo);
+                }
+                header("Location: clips_list.php");
+            break;
+        default:
+			echo "<p>Opzione non riconosciuta</p>";
+			echo "<a href=\"../index.php\">Home</a>";
+			break;
+    }
 }
 
 
@@ -44,6 +61,16 @@ function getClip($pdo, $start, $end, $clip_name){
 
     //$autore = $_SESSION["email_user"];
     $autore = "vincenzo.italiano@gmail.com";
-    $video = new Video($clip_path, getFilenameNoExtention($clip_name), "Clip del video{$_SESSION["path_video"]}", $autore);
+    $video = new Video(null, $clip_path, getFilenameNoExtention($clip_name), "Clip del video{$_SESSION["path_video"]}", $autore);
     return insertNewClip($pdo, $video, $_SESSION["path_video"]);
+}
+
+function multipleDelete($pdo){
+	foreach($_POST["id"] as $el){
+        try{
+            $video = getVideoFromId($pdo, $el);
+            unlink("../{$video->getPath()}");
+            deleteVideoFromId($pdo, $el);
+        } catch (Exception $e) {echo 'Eccezione: ',  $e->getMessage(), "\n";}
+	}
 }

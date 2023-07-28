@@ -191,7 +191,6 @@ function insertNewMark($pdo, $mark){
  * @return bool true se l'aggiornamento ha successo, altrimenti false
  */
 function updateMarkFromId($pdo, $mark){
-    var_dump($mark); echo"<br>";
    $query = "UPDATE segnaposti SET nome=:nome, nota=:nota WHERE id=:id";
    $statement = $pdo->prepare($query);
    $ris = $statement->execute([
@@ -300,8 +299,6 @@ function deleteScreenFromId($pdo, $id){
     $pdo->query($query);
 }
 
-
-
 /**
  * Inserisce nel db un nuovo video
  * @param PDO La connessione al db
@@ -353,17 +350,18 @@ function insertNewClip($pdo, $clip, $path_original_video){
  */
 function getClipsFromVideo($pdo, $path_video){
     $videos = array();
-    $query = "SELECT V.locazione, V.nome, V.autore, V.nota FROM video V INNER JOIN clips_video CV ON V.locazione = CV.locazione_clip WHERE CV.locazione_video_originale = \"path_original_video\"";
+    $query = "SELECT V.id, V.locazione, V.nome, V.autore, V.nota FROM video V INNER JOIN clips_video CV ON V.locazione = CV.locazione_clip WHERE CV.locazione_video_originale = '$path_video'";
     $statement = $pdo->query($query);
     $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
     if ($publishers) {
         foreach ($publishers as $publisher) {
             try{                
+                $id = $publisher['id'];
                 $path = $publisher['locazione'];
                 $name = $publisher['nome'];
                 $author = $publisher['autore'];
                 $note = $publisher['nota'];
-                $video = new Video($path, $name, $note, $author);
+                $video = new Video($id, $path, $name, $note, $author);
                 array_push($videos, $video);
             } catch (Exception $e) {
                 echo 'Eccezione: ',  $e->getMessage(), "\n";
@@ -372,4 +370,72 @@ function getClipsFromVideo($pdo, $path_video){
     }
 
     return $videos;
+}
+
+
+
+/**
+ * Elimina il video dal db con l'id specificato
+ * @param PDO La connessione al db
+ * @param integer $id indica l'id del video
+ */
+function deleteVideoFromId($pdo, $id){
+    $query = "DELETE FROM video WHERE id = $id";
+    $pdo->query($query);
+}
+
+/** Restitiusce un video dall'id specificato
+ * @param PDO La connessione al db
+ * @param integer $id indica l'id del video
+ * @return Video il video cercato, null se non trovato
+ */
+function getVideoFromId($pdo, $id){
+    $video = null;
+    $query = "SELECT * FROM video WHERE id = $id";
+    $statement = $pdo->query($query);
+    $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
+    if ($publishers) {
+        foreach ($publishers as $publisher) {
+            try{                
+                $id = $publisher['id'];
+                $path = $publisher['locazione'];
+                $name = $publisher['nome'];
+                $author = $publisher['autore'];
+                $note = $publisher['nota'];
+                $video = new Video($id, $path, $name, $note, $author);
+            } catch (Exception $e) {
+                echo 'Eccezione: ',  $e->getMessage(), "\n";
+            }
+        }
+    }
+
+    return $video;
+}
+
+/** Restitiusce un video dalla locazione specificata
+ * @param PDO La connessione al db
+ * @param string $path indica la locazione del video
+ * @return Video il video cercato, null se non trovato
+ */
+function getVideoFromPath($pdo, $path){
+    $video = null;
+    $query = "SELECT * FROM video WHERE locazione = '$path'";
+    $statement = $pdo->query($query);
+    $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
+    if ($publishers) {
+        foreach ($publishers as $publisher) {
+            try{                
+                $id = $publisher['id'];
+                $path = $publisher['locazione'];
+                $name = $publisher['nome'];
+                $author = $publisher['autore'];
+                $note = $publisher['nota'];
+                $video = new Video($id, $path, $name, $note, $author);
+            } catch (Exception $e) {
+                echo 'Eccezione: ',  $e->getMessage(), "\n";
+            }
+        }
+    }
+
+    return $video;
 }
