@@ -17,7 +17,7 @@ include 'classes/Video.php';
         <h1>Tutti le clip </h1>
     </head>
     <body>
-        <a href="../index.php"><h2>Home</h2></a><br>
+        <a href="../index.php" class="button">Home</a><br>
 
         <div>
             <form action="clip_manager.php?operation=multiple_clip_delete" method="post">

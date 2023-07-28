@@ -82,3 +82,29 @@ function checkTrimTime(start_trim, end_trim){
 function disableTrim(disabled){
     document.getElementById("trim_video").disabled = disabled;
 }
+
+function showScreenArea(){
+    let screen_area = document.getElementById('screen_area');
+    let btn = document.getElementById('show_screen_area');
+    if (screen_area.hidden == true){
+        screen_area.hidden = false;
+        btn.innerHTML = "Nascondi gli screenshot";
+    }
+    else{
+        screen_area.hidden = true;
+        btn.innerHTML = "Mostra gli screenshot";
+    }
+}
+
+function showMarks(){
+    let screen_area = document.getElementById('marks');
+    let btn = document.getElementById('show_marks');
+    if (screen_area.hidden == true){
+        screen_area.hidden = false;
+        btn.innerHTML = "Nascondi i segnaposti";
+    }
+    else{
+        screen_area.hidden = true;
+        btn.innerHTML = "Mostra i segnaposti";
+    }
+}

@@ -5,6 +5,8 @@ include 'db_connection.php';
 include 'functions.php';
 include 'classes/Screen.php';
 
+setPreviusPage();
+
 $filename = strtok($_SESSION["name_file_video"], '.');
 ?>
 
@@ -19,7 +21,7 @@ $filename = strtok($_SESSION["name_file_video"], '.');
         <h1>Tutti gli screenshots</h1>
     </head>
     <body>
-        <a href="../index.php"><h2>Home</h2></a><br>
+        <a href="../index.php" class="button">Home</a><br>
 
         <div>
             <form action="screen_manager.php?operation=multiple_screen_delete" method="post">

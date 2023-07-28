@@ -4,6 +4,7 @@ session_start();
 include 'db_connection.php';
 include 'functions.php';
 include 'classes/Screen.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -17,7 +18,7 @@ include 'classes/Screen.php';
         <h1>Dettagli Screen</h1>
     </head>
     <body>
-        <a href="../index.php"><h2>Home</h2></a><br>
+        <a href="../index.php" class="button">Home</a><br>
 
 <?php
 $pdo = get_connection();
@@ -53,7 +54,11 @@ if(isset($_GET["id"])){
             echo "<p id=\"screen_mess\">Screenshot non trovato</p>";
         }     
         else {
-            header("Location: ../index.php");
+            if($_GET["screen_deleted"]=="true"){
+                //echo "screen eliminato correttamente<br>";
+                //echo getPreviusPage();
+                header("Location: " . getPreviusPage());
+            }
         }
     } 
 }

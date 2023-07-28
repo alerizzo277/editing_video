@@ -1,9 +1,4 @@
 <?php
-
-function getFilenameNoExtention($filename){
-    return strtok($filename, '.');
-}
-
 /**
  * converte il timing del video indicato dall'appostio box nel browser in un intero
  * @param string $timing_screen La stringa è nel formato 00:00:000 (minuti:secondi:millesimi di secondi)
@@ -438,4 +433,88 @@ function getVideoFromPath($pdo, $path){
     }
 
     return $video;
+}
+
+
+/** Restitiusce la persona con l'email specificata
+ * @param PDO La connessione al db
+ * @param string $email 
+ * @return Person $person la persona cercata
+ */
+function getPersonaFromEmail($pdo, $email){
+    $person = null;
+    $query = "SELECT * FROM persone WHERE email = '$email'";
+    $statement = $pdo->query($query);
+    $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
+    if ($publishers) {
+        foreach ($publishers as $publisher) {
+            try{                
+                //$id = $publisher['id'];
+                $email = $publisher['email'];
+                $name = $publisher['nome'];
+                $surname = $publisher['cognome'];
+                $birthday = $publisher['data_nascita'];
+                $city = $publisher['citta'];
+                $address = $publisher['indirizzo'];
+                $telephone_number = $publisher['telefono'];
+                $person = new Person(null, $email, $name, $surname, $birthday, $city, $address, $telephone_number);
+            } catch (Exception $e) {
+                echo 'Eccezione: ',  $e->getMessage(), "\n";
+            }
+        }
+    }
+
+    return $person;
+}
+
+/**
+ * restiuisce tutti i viedo associati alla persona specificata
+ * @param PDO $pdo La connessione al db
+ * @param string $email della persona
+ * @return Array $videos i video cercati
+ */
+function getVideosFromUser($pdo, $email){
+    $videos = array();
+    $query = "SELECT * FROM video WHERE autore = '$email'";
+    $statement = $pdo->query($query);
+    $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
+    if ($publishers) {
+        foreach ($publishers as $publisher) {
+            try{                
+                $id = $publisher['id'];
+                $path = $publisher['locazione'];
+                $name = $publisher['nome'];
+                $author = $publisher['autore'];
+                $note = $publisher['nota'];
+                $video = new Video($id, $path, $name, $note, $author);
+                array_push($videos, $video);
+            } catch (Exception $e) {
+                echo 'Eccezione: ',  $e->getMessage(), "\n";
+            }
+        }
+    }
+
+    return $videos;
+}
+
+/**
+ * @return string restituisce il link alla pagina corrente
+ */
+function getCurentUrl(){
+    $actual_link = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    return $actual_link;
+}
+
+/**
+ * salva in memoria (in $_SESSION) la pagina attuale, che verrà usata come pagina precedente
+ */
+function setPreviusPage(){
+    $_SESSION["previus_page"] = getCurentUrl();
+}
+
+/**
+ * @return string restituisce il link alla pagina precedente
+ */
+function getPreviusPage(){
+    return $_SESSION["previus_page"];
 }

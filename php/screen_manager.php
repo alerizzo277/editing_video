@@ -19,7 +19,7 @@ if(isset($_GET["operation"])){
                 $timing_screen = getIntTimingScreen($timing_screen_string);
                 getScreen($path_video, $filename, $timing_screen, $timing_screen_string, $pdo);
             } catch (Exception $e) {echo 'Eccezione: ',  $e->getMessage(), "\n";}
-            header("Location: ../index.php?timing_screen=$timing_screen");
+            header("Location: editing_video.php?timing_screen=$timing_screen");
             break;
         case "update_screen":
             try{  
@@ -27,14 +27,14 @@ if(isset($_GET["operation"])){
                 if(!updateScreen($pdo)){
                     $ok = "false";
                 }
-                header("Location: ./screen_details.php?id={$_GET["id"]}&updated=$ok");
+                header("Location: screen_details.php?id={$_GET["id"]}&updated=$ok");
             } catch (Exception $e) {echo 'Eccezione: ',  $e->getMessage(), "\n";}
             break;
         case "delete_screen":
             if(isset($_GET["id"])){
                 deleteScreen($pdo, $_GET["id"]);
             }
-            header("Location: ./screen_details.php?id={$_GET["id"]}&screen_deleted=true");
+            header("Location: screen_details.php?id={$_GET["id"]}&screen_deleted=true");
             break;
         case "multiple_screen_delete":
             if(isset($_POST["id"])){
@@ -55,7 +55,8 @@ function getScreen($path_video, $filename, $timing_screen, $timing_screen_string
         ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds($timing_screen))
         ->save("../" . $screen_name);
      
-    $img_name = substr($screen_name, strpos($screen_name, "/") + 1);
+    //$img_name = substr($screen_name, strpos($screen_name, "/") + 1);
+    $img_name = basename($screen_name, ".jpg");
     $query = 'INSERT INTO screenshots(locazione, nome, video) VALUES (:locazione, :nome, :video)';
     $statement = $pdo->prepare($query);
     $statement->execute([

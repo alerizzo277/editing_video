@@ -22,7 +22,7 @@ if(isset($_GET["operation"])){
 
                 $start = str_replace(":", "", $start);
                 $end = str_replace(":", "", $end);
-                $filename = getFilenameNoExtention($_SESSION["name_file_video"]);
+                $filename = basename($_SESSION["name_file_video"], ".mp4");
                 $clip_name = "clip_$filename"."_$start"."_$end.mp4";
 
                 getClip($pdo, $start_number, $end_number, $clip_name);
@@ -61,7 +61,7 @@ function getClip($pdo, $start, $end, $clip_name){
 
     //$autore = $_SESSION["email_user"];
     $autore = "vincenzo.italiano@gmail.com";
-    $video = new Video(null, $clip_path, getFilenameNoExtention($clip_name), "Clip del video{$_SESSION["path_video"]}", $autore);
+    $video = new Video(null, $clip_path, basename($clip_name, ".mp4"), "Clip del video{$_SESSION["path_video"]}", $autore);
     return insertNewClip($pdo, $video, $_SESSION["path_video"]);
 }
 

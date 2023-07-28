@@ -23,7 +23,6 @@ if(isset($_GET["operation"])){
 				$video = $_SESSION["path_video"];
 				$mark = new Mark($timing, $name, $note, $video);
 				echo insertNewMark($pdo, $mark);
-				echo "<br>{$mark->getID()}";
 			}
 			break;	
 		case "update_mark":
@@ -36,18 +35,19 @@ if(isset($_GET["operation"])){
 				$id = $_GET["id"];
 				$mark = new Mark($timing, $name, $note, $video, $id);
 				echo updateMarkFromId($pdo, $mark);
-				echo "<br>{$mark->getId()}";
 			}
 			break;
 		case "delete_mark":
 			if(isset($_GET["id"])){
 				$id = $_GET["id"];
 				deleteMarkFromId($pdo, $id);
+				header("Location: " . getPreviusPage());
 			}
 			break;
 		case "multiple_mark_delete":
 			if(isset($_POST["id"])){
 				multipleDelete($pdo);
+				header("Location: " . getPreviusPage());
 			}
 			break;
 		default:
@@ -60,8 +60,9 @@ if(isset($_GET["operation"])){
 	if(isset($_POST["timing_mark"])){
 		$timing = getIntTimingScreen($_POST["timing_mark"]);
 		$tmp = "?timing_screen=$timing";
+		header("Location: editing_video.php$tmp");
 	}
-	header("Location: ../index.php$tmp");
+	
 }
 
 function multipleDelete($pdo){
