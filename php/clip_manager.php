@@ -8,7 +8,7 @@ include 'classes/Video.php';
 
 
 $pdo = get_connection();
-
+$video = unserialize($_SESSION["video"]);
 
 if(isset($_GET["operation"])){
     switch($_GET["operation"]){
@@ -22,7 +22,7 @@ if(isset($_GET["operation"])){
 
                 $start = str_replace(":", "", $start);
                 $end = str_replace(":", "", $end);
-                $filename = basename($_SESSION["name_file_video"], ".mp4");
+                $filename = basename($video->getPath(), ".mp4");
                 $clip_name = "clip_$filename"."_$start"."_$end.mp4";
 
                 getClip($pdo, $start_number, $end_number, $clip_name);

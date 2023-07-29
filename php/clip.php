@@ -5,7 +5,8 @@ include 'db_connection.php';
 include 'functions.php';
 include 'classes/Video.php';
 
-$filename = strtok($_SESSION["name_file_video"], '.');
+$video = unserialize($_SESSION["video"]);
+$filename = basename($video->getName(), ".mp4");
 $pdo = get_connection();
 
 ?>
@@ -24,16 +25,8 @@ $pdo = get_connection();
 
 <body>
     <a href="../index.php">Home</a><br>
-    <video id="<?php echo $filename ?>" controls muted autoplay>
-            <source src="
-            <?php
-                if(isset($_GET["id"])){
-                    $id = intval($_GET["id"]);
-                    $video = getVideoFromId($pdo, $id);              
-                    echo "../" .  $video->getPath();
-                }
-            ?>
-            " type="video/mp4">
+    <video id="<?php echo $video->getId() ?>" controls muted autoplay>
+            <source src="<?php echo "../{$video->getPath()}";?>" type="video/mp4">
     </video>
     <form action="clip_manager.php?operation=new_clip" method="post">
         <input type="text" name="timing_video" id="timing_video" readonly><br>
@@ -61,7 +54,7 @@ $pdo = get_connection();
 
 <script>
     //timing video a tempo reale
-    var video = $('#<?php echo $filename ?>');
+    var video = $('#<?php echo $video->getId() ?>');
     video.bind("timeupdate", function() {
 
         var stime = video[0].currentTime;

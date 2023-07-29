@@ -498,6 +498,26 @@ function getVideosFromUser($pdo, $email){
 }
 
 /**
+ * Aggiorna un video nel db con l'id specificato nell'istanza della classe
+ * @param PDO La connessione al db
+ * @param Video $mark Istanza della classe Video, che contiene i valori da aggiornare
+ * @return bool true se l'aggiornamento ha successo, altrimenti false
+ */
+function updateVideo($pdo, $video){
+    $query = "UPDATE video SET nome=:nome, nota=:nota WHERE id=:id";
+    $statement = $pdo->prepare($query);
+    $ris = $statement->execute([
+        ':nome' => $video->getName(),
+        ':nota' => $video->getNote(),
+        ':id' => $video->getId(),
+     ]);
+
+     return $ris;
+}
+
+
+
+/**
  * @return string restituisce il link alla pagina corrente
  */
 function getCurentUrl(){
@@ -518,3 +538,4 @@ function setPreviusPage(){
 function getPreviusPage(){
     return $_SESSION["previus_page"];
 }
+

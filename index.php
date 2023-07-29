@@ -13,11 +13,10 @@ include 'php/classes/Person.php';
 $pdo = get_connection();
 
 $_SESSION["person"] = getPersonaFromEmail($pdo, "vincenzo.italiano@gmail.com");
-$_SESSION["path_video"] = "video/video.mp4";
-$_SESSION["video"] = getVideoFromPath($pdo, $_SESSION["path_video"]);
-
-$video = $_SESSION["video"];
-$filename = basename($video->getPath(), ".mp4");
+//$_SESSION["path_video"] = "video/video.mp4";
+//$_SESSION["video"] = getVideoFromPath($pdo, $_SESSION["path_video"]);
+//$video = $_SESSION["video"];
+//$filename = basename($video->getPath(), ".mp4");
 
 
 setPreviusPage();
@@ -47,7 +46,7 @@ setPreviusPage();
                         echo <<<END
                                     <tr class='clickable-row'>
                                         <td><input type="checkbox" id="{$el->getId()}" name="id[]" value="{$el->getId()}"></td>
-                                        <td data-href='php/video_details.php?id={$el->getId()}'>{$el->getName()}</td>
+                                        <td data-href='php/video_manager.php?operation=select_video&id={$el->getId()}'>{$el->getName()}</td>
                                     </tr>\n
                         END;
                     }

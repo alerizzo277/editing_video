@@ -10,17 +10,20 @@ include 'classes/Video.php';
 $pdo = get_connection();
 setPreviusPage();
 
-$video = null;
-$filename = null;
+try{
+    $video = unserialize($_SESSION["video"]);
+    $filename = basename($video->getPath(), ".mp4");
+} catch (Exception $e) {echo "Eccezione: " . $e->getMessage();}  
 
+
+/*NON MI DOVREBBE SERVIRE, HO SALVATO IL VIDEO IN SESSION
 if(isset($_GET["id"])){
     try{
         $id = intval($_GET["id"]);
         $video = getVideoFromId($pdo, $id);
         $filename = basename($video->getPath(), ".mp4");
-    } catch (Exception $e) {echo "Eccezione: " . $e->getMessage();}
-    
-}
+    } catch (Exception $e) {echo "Eccezione: " . $e->getMessage();}  
+}*/
 ?>
 
 <!DOCTYPE html>
@@ -46,7 +49,7 @@ if(isset($_GET["id"])){
         <source src="<?php echo "../{$video->getPath()}" ?>" type="video/mp4">
     </video>
 
-    <form action="#" method="post" onsubmit="alert('sicuro?');">
+    <form action="video_manager.php?operation=update_video&id=<?php echo $video->getId() ?>" method="post" onsubmit="confirm('Confermi?')">
         <fieldset>
             <legend>Modifica Nome e Descrizione</legend>
             <!--<input type="text" name="timing_video" id="timing_video" readonly>-->
@@ -55,7 +58,7 @@ if(isset($_GET["id"])){
             <label>Descrizione</label>
             <textarea type="text" name="video_note" id="video_note"><?php echo $video->getNote(); ?></textarea>
             <input type="submit" value="Salva">
-            <input type="submit" value="Elimina Video" formaction="#">
+            <input type="submit" value="Elimina Video" formaction="video_manager.php?operation=delete_video&id=<?php echo $video->getId() ?>">
         </fieldset>
     </form>
 
