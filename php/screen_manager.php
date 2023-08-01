@@ -8,6 +8,10 @@ include 'classes/Screen.php';
 
 $path_video = "../" . $_SESSION["path_video"];
 $filename = $_SESSION["name_file_video"];
+/*var_dump($_SESSION["video"]);
+$video = unserialize($_SESSION["video"]);
+var_dump($video);
+$filename = basename($video->getPath(), ".mp4");*/
 
 $pdo = get_connection();
 

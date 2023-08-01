@@ -29,6 +29,8 @@ if(isset($_GET["operation"])){
             header("Location: " . getPreviusPage() . "?video_deleted=true");
             break;
         case "multiple_video_delete":
+            multipleDelete($pdo);
+            header("Location: " . getPreviusPage() . "?videos_deleted=true");
             break;
         default:
 			break;
@@ -72,7 +74,9 @@ function multipleDelete($pdo){
 	foreach($_POST["id"] as $el){
         try{
             $video = getVideoFromId($pdo, $el);
-            unlink("../{$video->getPath()}");
+            if(file_exists("../{$video->getPath()}")){   
+                unlink("../{$video->getPath()}");
+            }
             deleteVideoFromId($pdo, $el);
         } catch (Exception $e) {echo 'Eccezione: ',  $e->getMessage(), "\n";}
 	}

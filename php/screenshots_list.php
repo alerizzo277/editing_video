@@ -7,7 +7,6 @@ include 'classes/Screen.php';
 
 setPreviusPage();
 
-$filename = strtok($_SESSION["name_file_video"], '.');
 ?>
 
 <!DOCTYPE html>

@@ -1,67 +1,33 @@
 <?php
+//serve per lo sviluppo del sito, andrà poi sostituito con il verp login.php
+
 session_start();
 
-include 'php/db_connection.php';
-include 'php/functions.php';
-include 'php/classes/Mark.php';
-include 'php/classes/Screen.php';
-include 'php/classes/Video.php';
-include 'php/classes/Person.php';
-
-
+include "php/db_connection.php";
+include "php/functions.php";
+include "php/classes/Person.php";
 
 $pdo = get_connection();
 
-$_SESSION["person"] = getPersonaFromEmail($pdo, "vincenzo.italiano@gmail.com");
-//$_SESSION["path_video"] = "video/video.mp4";
-//$_SESSION["video"] = getVideoFromPath($pdo, $_SESSION["path_video"]);
-//$video = $_SESSION["video"];
-//$filename = basename($video->getPath(), ".mp4");
+//dopo che l'uetnte si è loggato estraggo dal db la persona e la salvo serializzata in session
 
-
-setPreviusPage();
+if(!isset($_SESSION["person"])){
+    $person = getPersonaFromEmail($pdo, "vincenzo.italiano@gmail.com");
+    $_SESSION["person"] = serialize($person);
+}
+else{
+    header("Location: videos_list.php");
+}
 ?>
 
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="utf-8">
-        <link rel="stylesheet" href="css/style.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-        <script src="js/functions.js"></script>
-        <title>Scelta Video</title>
-        <h1>Scelta video</h1>
-    </head>
-    <body>
-        <form action="#" method="post" onsubmit="confirm('Sicuro di eliminare i video selezionati?')">
-            <table class="paleBlueRows">
-                <tr>
-                    <th>Scelta</th>
-                    <th>Nome</th>
-                </tr>
-                <?php
-                try{               
-                    $videos = getVideosFromUser($pdo, "vincenzo.italiano@gmail.com");
-                    foreach($videos as $el){
-                        echo <<<END
-                                    <tr class='clickable-row'>
-                                        <td><input type="checkbox" id="{$el->getId()}" name="id[]" value="{$el->getId()}"></td>
-                                        <td data-href='php/video_manager.php?operation=select_video&id={$el->getId()}'>{$el->getName()}</td>
-                                    </tr>\n
-                        END;
-                    }
-                } catch (Exception $e) {echo 'Eccezione: ',  $e->getMessage(), "\n";}
-                ?>
-            </table>
-            <input type="submit" value="Elimina">
-        </form>
-    </body>
-</html>
-
-<script>
-    jQuery(document).ready(function($) {
-    $(".clickable-row td:not(:first-child)").click(function() {
-        window.location = $(this).data("href");
-    });
-});
-</script>
+<link rel="stylesheet" href="css/style.css" method="post">
+<form action="videos_list.php">
+    <fieldset>
+        <legend>Test Login form</legend>
+        <label>Email</label>
+        <input type="email" value="email@gmail.com" readonly><br>
+        <label>Password</label>
+        <input type="password" value="password" readonly><br>
+        <input type="submit">
+    </fieldset>
+</form>
