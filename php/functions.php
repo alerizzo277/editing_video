@@ -481,12 +481,13 @@ function getVideosFromUser($pdo, $email){
     if ($publishers) {
         foreach ($publishers as $publisher) {
             try{                
-                $id = $publisher['id'];
+                $id = NULL;//$publisher['id'];
                 $path = $publisher['locazione'];
                 $name = $publisher['nome'];
                 $author = $publisher['autore'];
                 $note = $publisher['nota'];
-                $video = new Video($id, $path, $name, $note, $author);
+                $session = $publisher['sessione'];
+                $video = new Video($id, $path, $name, $note, $author, $session);
                 array_push($videos, $video);
             } catch (Exception $e) {
                 echo 'Eccezione: ',  $e->getMessage(), "\n";
