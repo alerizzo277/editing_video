@@ -10,14 +10,15 @@ include 'classes/Video.php';
 $pdo = get_connection();
 setPreviusPage();
 
+//se metto il video nel session
 try{
     $video = unserialize($_SESSION["video"]);
     $filename = basename($video->getPath(), ".mp4");
-} catch (Exception $e) {echo "Eccezione: " . $e->getMessage();}  
+} catch (Exception $e) {echo "Eccezione: " . $e->getMessage();}
 
 
-/*NON MI DOVREBBE SERVIRE, HO SALVATO IL VIDEO IN SESSION
-if(isset($_GET["id"])){
+
+/*if(isset($_GET["id"])){
     try{
         $id = intval($_GET["id"]);
         $video = getVideoFromId($pdo, $id);

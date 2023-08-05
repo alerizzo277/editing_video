@@ -5,7 +5,10 @@ include 'db_connection.php';
 include 'functions.php';
 include 'classes/Mark.php';
 
-setPreviusPage();
+//if(isPageRefreshed()){
+    setPreviusPage();
+//}
+
 ?>
 
 <!DOCTYPE html>
@@ -20,6 +23,7 @@ setPreviusPage();
     </head>
     <body>
         <a href="../index.php" class="button">Home</a><br>
+        <!-- DA SISTEMARE <a href="<?php echo getPreviusPage()?>" class="button">Indierto</a><br>-->
 
         <div>
             <form action="mark_manager.php?operation=multiple_mark_delete" method="post">
@@ -49,6 +53,7 @@ try{
 ?>
                 </table>
                 <input type="submit" value="Elimina">
+                <!-- da disabilitare con js il pulsante elimina, se nessuna chkbox è selezionata-->
             </form>
         </div>
     </body>

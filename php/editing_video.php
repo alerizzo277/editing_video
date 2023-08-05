@@ -143,7 +143,7 @@ $video = getVideoFromPath($pdo, $_SESSION["path_video"]);
 
     function segnaposto() {
         const xhttp = new XMLHttpRequest();
-        var url = "mark_manager.php?timing=" + $('#timing_video').val();
+        var url = "mark_manager.php? timing=" + $('#timing_video').val();
         xhttp.open("GET", url, true);
         xhttp.onreadystatechange = function() {
             if (this.readyState = 4 && this.status === 200) {

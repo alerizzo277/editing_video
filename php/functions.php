@@ -1,4 +1,41 @@
 <?php
+
+define("INDEX", "index.php");
+
+define("EDITING_VIDEO", "editing.php");
+
+define("VIDEO_MANAGER", "video_manager.php");
+define("VIDEOS_LIST", "videos_list.php");
+define("VIDEO_DETAILS", "video_details.php");
+
+define("CLIP", "clip.php");
+define("CLIP_MANAGER", "clip_manager.php");
+define("CLIPS_LIST", "clips_list.php");
+
+define("MARK_DETAILS", "mark_details.php");
+define("MARK_MANAGER", "mark_manager.php");
+define("MARKS_LIST", "marks_list.php");
+
+define("SCREEN_DETAILS", "screen_details.php");
+define("SCREEN_MANAGER", "screen_manager.php");
+define("SCREENSHOTS_LIST", "screenshots_list.php");
+
+
+/**
+ * mi serve per fare dei test sui valori delle variabili
+ * aggiunge una eventuale descrizione da stampare e va a capo dopo la stampa 
+ */
+function myVarDump($value, $descr = ""){
+    echo "$descr:    "; var_dump($value); echo "<br><br>\n";
+}
+
+/**
+ * controlla se una pagina è stata ricaricata
+ */
+function isPageRefreshed(){
+    return (isset($_SERVER['HTTP_CACHE_CONTROL']) && $_SERVER['HTTP_CACHE_CONTROL'] == 'max-age=0');
+}
+
 /**
  * converte il timing del video indicato dall'appostio box nel browser in un intero
  * @param string $timing_screen La stringa è nel formato 00:00:000 (minuti:secondi:millesimi di secondi)
@@ -6,7 +43,7 @@
  */
 function getIntTimingScreen($timing_screen){
 
-    $vet_timing = array();  
+    $vet_timing = array();
     $tok = strtok($timing_screen, ":");
     while ($tok !== false) {
         array_push($vet_timing, intval($tok));
@@ -356,7 +393,8 @@ function getClipsFromVideo($pdo, $path_video){
                 $name = $publisher['nome'];
                 $author = $publisher['autore'];
                 $note = $publisher['nota'];
-                $video = new Video($id, $path, $name, $note, $author);
+                $session = $publisher['sessione'];
+                $video = new Video($id, $path, $name, $note, $author, $session);
                 array_push($videos, $video);
             } catch (Exception $e) {
                 echo 'Eccezione: ',  $e->getMessage(), "\n";
@@ -397,7 +435,8 @@ function getVideoFromId($pdo, $id){
                 $name = $publisher['nome'];
                 $author = $publisher['autore'];
                 $note = $publisher['nota'];
-                $video = new Video($id, $path, $name, $note, $author);
+                $session = $publisher['sessione'];
+                $video = new Video($id, $path, $name, $note, $author, $session);
             } catch (Exception $e) {
                 echo 'Eccezione: ',  $e->getMessage(), "\n";
             }
@@ -425,7 +464,8 @@ function getVideoFromPath($pdo, $path){
                 $name = $publisher['nome'];
                 $author = $publisher['autore'];
                 $note = $publisher['nota'];
-                $video = new Video($id, $path, $name, $note, $author);
+                $session = $publisher['sessione'];
+                $video = new Video($id, $path, $name, $note, $author, $session);
             } catch (Exception $e) {
                 echo 'Eccezione: ',  $e->getMessage(), "\n";
             }
@@ -481,7 +521,7 @@ function getVideosFromUser($pdo, $email){
     if ($publishers) {
         foreach ($publishers as $publisher) {
             try{                
-                $id = NULL;//$publisher['id'];
+                $id = $publisher['id'];
                 $path = $publisher['locazione'];
                 $name = $publisher['nome'];
                 $author = $publisher['autore'];

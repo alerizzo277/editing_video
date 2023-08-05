@@ -5,24 +5,36 @@ include '../vendor/autoload.php';
 include 'functions.php';
 include 'db_connection.php';
 include 'classes/Video.php';
-
+include 'classes/Person.php';
 
 $pdo = get_connection();
-$video = unserialize($_SESSION["video"]);
+$video = null;
+$person = null;
 
+if(isset($_SESSION["video"])){
+    $video = unserialize($_SESSION["video"]);
+}
+if(isset($_SESSION["person"])){
+    $person = unserialize($_SESSION["person"]);
+    myVarDump($person);
+}
+else{
+    header("Location: ../".INDEX);
+}
 
 if(isset($_GET["operation"])){
     switch($_GET["operation"]){
         case "select_video":
             select($pdo);
-            $video = unserialize($_SESSION["video"]); //non dovrebbe più servire l'id, ora che uso il video salvato in sessio
-            header("Location: video_details.php");
+            //$video = unserialize($_SESSION["video"]);se il video salvato in sessio
+            header("Location: ".VIDEO_DETAILS);
             break;
         case "new_video":
             break;  
         case "update_video":
-            update($pdo, $video);
-            header("Location: " . getPreviusPage());
+            update($pdo, $video, $person);
+            //header("Location: " . getPreviusPage());
+            header("Location: " . VIDEO_MANAGER . "?operation=select_video&id=" . $video->getId());
             break;
         case "delete_video":
             delete($pdo);
@@ -48,16 +60,17 @@ function select($pdo){
     }
 }
 
-function update($pdo, $video){
-    //if(isset($_GET["id"])){
+function update($pdo, $video, $person){
+    if(isset($_GET["id"])){
         try{
+            myVarDump($person);
             $id = intval($_GET["id"]);
             $name = ($_POST["video_name"] == "") ? null : $_POST["video_name"];
             $note = ($_POST["video_note"] == "") ? null : $_POST["video_note"];
-            $video = new Video($video->getId(), null, $name, $note, null);
+            $video = new Video($video->getId(), $video->getPath(), $name, $note, $person->getEmail(), $video->getSession());
             updateVideo($pdo, $video);
         } catch (Exception $e) {echo 'Eccezione: ',  $e->getMessage(), "\n";}
-    //}
+    }
 }
 
 function delete($pdo){

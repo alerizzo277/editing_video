@@ -1,6 +1,12 @@
 <?php
 //serve per lo sviluppo del sito, andrà poi sostituito con il verp login.php
 
+
+/*
+in questa pagina vengono settate una cosa fondamentale per il funzionamento dell'editing:
+- la persona loggata in SESSION come istanza della classse 'Person'. L'istanza verrà serializzata e ad ogni utilizzo de-serializzata
+*/
+
 session_start();
 
 include "php/db_connection.php";
@@ -16,12 +22,12 @@ if(!isset($_SESSION["person"])){
     $_SESSION["person"] = serialize($person);
 }
 else{
-    header("Location: videos_list.php");
+    header("Location: php/" . VIDEOS_LIST);
 }
 ?>
 
 <link rel="stylesheet" href="css/style.css" method="post">
-<form action="videos_list.php">
+<form action="<?php echo "php/".VIDEOS_LIST ?>">
     <fieldset>
         <legend>Test Login form</legend>
         <label>Email</label>
