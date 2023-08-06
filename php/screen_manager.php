@@ -5,13 +5,26 @@ include '../vendor/autoload.php';
 include 'functions.php';
 include 'db_connection.php';
 include 'classes/Screen.php';
+include 'classes/Video.php';
+include 'classes/Person.php';
 
-$path_video = "../" . $_SESSION["path_video"];
-$filename = $_SESSION["name_file_video"];
-/*var_dump($_SESSION["video"]);
-$video = unserialize($_SESSION["video"]);
-var_dump($video);
-$filename = basename($video->getPath(), ".mp4");*/
+$video = null;
+$person = null;
+$filename = null;
+$path_video = null;
+
+if(isset($_SESSION["video"])){
+    $video = unserialize($_SESSION["video"]);
+    $filename = basename($video->getPath(), ".mp4");
+    $path_video = $video->getPath();
+}
+if(isset($_SESSION["person"])){
+    $person = unserialize($_SESSION["person"]);
+    myVarDump($person);
+}
+else{
+    header("Location: ../".INDEX);
+}
 
 $pdo = get_connection();
 
@@ -23,7 +36,7 @@ if(isset($_GET["operation"])){
                 $timing_screen = getIntTimingScreen($timing_screen_string);
                 getScreen($path_video, $filename, $timing_screen, $timing_screen_string, $pdo);
             } catch (Exception $e) {echo 'Eccezione: ',  $e->getMessage(), "\n";}
-            header("Location: editing_video.php?timing_screen=$timing_screen");
+            //header("Location: editing_video.php?timing_screen=$timing_screen");
             break;
         case "update_screen":
             try{  
