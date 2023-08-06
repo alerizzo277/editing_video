@@ -245,6 +245,28 @@ function deleteMarkFromId($pdo, $id){
 }
 
 /**
+ * Inserisce nel db un nuovo screenshots
+ * @param PDO La connessione al db
+ * @param Screen $screen Istanza della classe Screen, che contiene i valori da inserie
+ * @return bool true se l'inserimento ha successo, altrimenti false
+ */
+function insertNewScreen($pdo, $screen){
+    $ris = null;
+    try{
+        $query = 'INSERT INTO screenshots(locazione, nome, nota, video) VALUES (:locazione, :nome, :nota, :video)';
+        $statement = $pdo->prepare($query);
+        $statement->execute([
+            ':locazione' => $screen->getPath(),
+            ':nome' => $screen->getName(),
+            ':nota' => $screen->getNote(),
+            ':video' => $screen->getPathVideo(),
+        ]);
+    } catch (Exception $e){echo "Eccezione:" . $e->getMessage();}
+
+    return $ris;
+}
+
+/**
  * Restituisce i mark salvati nel db come vettore di istanse della classe Mark
  * @param PDO La connessione al db
  * @param string Il percorso del video

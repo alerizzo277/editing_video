@@ -16,7 +16,6 @@ $path_video = null;
 if(isset($_SESSION["video"])){
     $video = unserialize($_SESSION["video"]);
     $filename = basename($video->getPath(), ".mp4");
-    $path_video = $video->getPath();
 }
 if(isset($_SESSION["person"])){
     $person = unserialize($_SESSION["person"]);
@@ -34,9 +33,10 @@ if(isset($_GET["operation"])){
             try{                
                 $timing_screen_string = $_POST["timing_video"];
                 $timing_screen = getIntTimingScreen($timing_screen_string);
-                getScreen($path_video, $filename, $timing_screen, $timing_screen_string, $pdo);
+                getScreen($video->getPath(), $filename, $timing_screen, $timing_screen_string, $pdo);
             } catch (Exception $e) {echo 'Eccezione: ',  $e->getMessage(), "\n";}
             //header("Location: editing_video.php?timing_screen=$timing_screen");
+            header("Location: " . getPreviusPage(). "?timing_screen=$timing_screen");
             break;
         case "update_screen":
             try{  
@@ -66,21 +66,17 @@ if(isset($_GET["operation"])){
 //funzioni locali, solo per questo file
 function getScreen($path_video, $filename, $timing_screen, $timing_screen_string, $pdo){
     $ffmpeg = FFMpeg\FFMpeg::create();
-    $video = $ffmpeg->open($path_video);
+    $video = $ffmpeg->open("../$path_video");
+    
     $screen_name = generateScreenName($filename, $timing_screen_string);
     $video
         ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds($timing_screen))
         ->save("../" . $screen_name);
-     
-    //$img_name = substr($screen_name, strpos($screen_name, "/") + 1);
-    $img_name = basename($screen_name, ".jpg");
-    $query = 'INSERT INTO screenshots(locazione, nome, video) VALUES (:locazione, :nome, :video)';
-    $statement = $pdo->prepare($query);
-    $statement->execute([
-        ':locazione' => $screen_name,
-        ':nome' => $img_name,
-        ':video' => $_SESSION["path_video"],
-    ]);
+    
+    $name = basename($screen_name, ".jpg");
+    $note = "Screenshots del video $path_video";
+    $screen = new Screen($screen_name, $name, $note, NULL, $path_video);
+    insertNewScreen($pdo, $screen);
 }
 
 function updateScreen($pdo){
