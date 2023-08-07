@@ -26,19 +26,23 @@ if(isset($_GET["operation"])){
     switch($_GET["operation"]){
         case "new_clip":
             if (isset($_POST["start_timing_trim"]) && isset($_POST["end_timing_trim"])){
-                newClip($pdo, $video, $person);
-                header("Location: ./clip.php?clip=$clip_name");
+                $clip = newClip($pdo, $video, $person);
+                if(isset($clip)){
+                    $clip = getVideoFromPath($pdo, $clip->getPath());
+                    header("Location: ". CLIP ."?clip={$clip->getId()}");
+                }
+                else{header("Location: ". CLIP);}
             }
             break;  
         case "multiple_clip_delete":
                 if(isset($_POST["id"])){
                     multipleDelete($pdo);
                 }
-                header("Location: clips_list.php");
+                header("Location: ".CLIPS_LIST);
             break;
         default:
 			echo "<p>Opzione non riconosciuta</p>";
-			echo "<a href=\"../index.php\">Home</a>";
+			echo "<a href=\"../" . INDEX . "\">Home</a>";
 			break;
     }
 }
@@ -56,18 +60,21 @@ function newClip($pdo, $video, $person) {
     $filename = basename($video->getPath(), ".mp4");
     $clip_name = "clip_$filename"."_$start"."_$end.mp4";
 
-    getClip($pdo, $start_number, $end_number, $clip_name, $video);
+    getClip($start_number, $end_number, $clip_name, $video);
 
-    $video = new Video(null, "video/$clip_name", basename($clip_name, ".mp4"), "Clip del video{$_SESSION["path_video"]}", $person->getEmail(), $video->getSession());
-    return insertNewClip($pdo, $video, $_SESSION["path_video"]);
+    $clip = new Video(null, "video/$clip_name", basename($clip_name, ".mp4"), "Clip del video{$_SESSION["path_video"]}", $person->getEmail(), $video->getSession());
+    
+    myVarDump($clip);
+    
+    insertNewClip($pdo, $clip, $video->getPath());
+
+    return $clip;
 }
 
 /**
- * @param float $start Il minutaggio iniziale per estrarre clip
- * @param float $end Il minutaggio finale per estrarre clip
- * @param string $clip_name nome della clip, inclusa di estensione
- **/
-function getClip($pdo, $start, $end, $clip_name, $video){
+ * Estrae la clip dal video; la salva nella cartrella video/
+ */
+function getClip($start, $end, $clip_name, $video){
     $clip_path = "../video/$clip_name";
     try{
         $ffmpeg = FFMpeg\FFMpeg::create();

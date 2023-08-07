@@ -37,14 +37,16 @@ $pdo = get_connection();
         <input type="submit" id="trim_video" value="EstraiClip" disabled>
     </form>
 
-    <div>
-        <video controls muted>
+    <div id="clip" hidden>
+        <legend>Clip Estratta</legend>
+        <video controls muted width="240" height="160">
             <?php 
                 if(isset($_GET["clip"])){
-                    echo "<source src=\"../video/{$_GET["clip"]}\" type=\"video/mp4\">";
+                    $id = intval($_GET["clip"]);
+                    $clip = getVideoFromId($pdo, $id);
+                    echo "<source src=\"../{$clip->getPath()}\" type=\"video/mp4\">";
                 }
             ?>
-            
         </video>
     </div>
 
@@ -64,4 +66,11 @@ $pdo = get_connection();
 
         $('#timing_video').val(fromSeconds(video[0].currentTime) + ':' + stime);
     });
+
+
+    var clip = findGetParameter("clip");
+    if (clip != null){
+        document.getElementById("clip").hidden = false;
+    }
+
 </script>

@@ -42,7 +42,6 @@ setPreviusPage();
                     //$videos = getVideosFromUser($pdo, "vincenzo.italiano@gmail.com");
                     $videos = getVideosFromUser($pdo, $person->getEmail());
                     foreach($videos as $el){
-                        myVarDump($el);
                         echo <<<END
                                     <tr class='clickable-row'>
                                         <td><input type="checkbox" id="{$el->getId()}" name="id[]" value="{$el->getId()}"></td>        

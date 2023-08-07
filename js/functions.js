@@ -14,6 +14,7 @@ function fromSeconds(seconds, showHours) {
     return timestring;
 }
 
+//null se il paramentro non è settato
 function findGetParameter(parameterName) {
         var result = null,
             tmp = [];
