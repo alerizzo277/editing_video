@@ -6,25 +6,35 @@ include 'functions.php';
 include 'classes/Mark.php';
 include 'classes/Screen.php';
 include 'classes/Video.php';
+include 'classes/Person.php';
 
 $pdo = get_connection();
+
 setPreviusPage();
 
-//se metto il video nel session
-try{
+$video = null;
+$filename = "";
+
+if(isset($_SESSION["video"])){
     $video = unserialize($_SESSION["video"]);
     $filename = basename($video->getPath(), ".mp4");
-} catch (Exception $e) {echo "Eccezione: " . $e->getMessage();}
+} elseif (isset($_GET["video_deleted"])) {
+    
+    echo "<p class=\"message\">Video Eliminato correttamente</p>";
+} else{
+    http_response_code(404);
+    include('error.php');
+    die();
+}
 
 
-
-/*if(isset($_GET["id"])){
-    try{
-        $id = intval($_GET["id"]);
-        $video = getVideoFromId($pdo, $id);
-        $filename = basename($video->getPath(), ".mp4");
-    } catch (Exception $e) {echo "Eccezione: " . $e->getMessage();}  
-}*/
+if(isset($_SESSION["person"])){
+    $person = unserialize($_SESSION["person"]);
+    //  myVarDump($person);
+}
+else{
+    header("Location: ../".INDEX);
+}
 ?>
 
 <!DOCTYPE html>
@@ -46,20 +56,21 @@ try{
 </style>
 
 <body>
-   <video id="<?php echo $filename ?>" controls muted autoplay>
-        <source src="<?php echo "../{$video->getPath()}" ?>" type="video/mp4">
+    <a class="button" href="../index.php">Home</a><br>
+    <video id="<?php echo $filename ?>" controls muted autoplay>
+        <source src="<?php if($video != null){echo "../{$video->getPath()}";} ?>" type="video/mp4">
     </video>
 
-    <form action="video_manager.php?operation=update_video&id=<?php echo $video->getId() ?>" method="post" onsubmit="confirm('Confermi?')">
+    <form action="<?php echo VIDEO_MANAGER?>?operation=update_video&id=<?php if($video != null){echo $video->getId();} ?>" method="post" onsubmit="confirm('Confermi?')">
         <fieldset>
             <legend>Modifica Nome e Descrizione</legend>
             <!--<input type="text" name="timing_video" id="timing_video" readonly>-->
             <label>Nome: </label>
-            <input type="text" name="video_name" id="video_name" value="<?php echo $video->getName(); ?>"><br>
+            <input type="text" name="video_name" id="video_name" value="<?php if($video != null){echo $video->getName();} ?>"><br>
             <label>Descrizione</label>
-            <textarea type="text" name="video_note" id="video_note"><?php echo $video->getNote(); ?></textarea>
+            <textarea type="text" name="video_note" id="video_note"><?php if($video != null){echo $video->getNote();} ?></textarea>
             <input type="submit" value="Salva">
-            <input type="submit" value="Elimina Video" formaction="video_manager.php?operation=delete_video&id=<?php echo $video->getId() ?>">
+            <input type="submit" value="Elimina Video" formaction="<?php echo VIDEO_MANAGER?>?operation=delete_video">
         </fieldset>
     </form>
 

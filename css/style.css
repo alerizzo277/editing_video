@@ -5,6 +5,11 @@ video {
   max-height: 50;
 }
 
+.message{
+  font-size: 50px;
+  color: red;
+}
+
 /*stile link come button*/
 .button {
   font: bold 16px Arial;

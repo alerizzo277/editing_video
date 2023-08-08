@@ -37,8 +37,8 @@ try{
         echo <<<END
                     <tr class='clickable-row'>
                         <td><input type="checkbox" id="{$el->getId()}" name="id[]" value="{$el->getId()}"></td>
-                        <td data-href='clip.php?id={$el->getId()}'>{$el->getName()}</td>
-                        <td data-href='clip.php?id={$el->getId()}'>{$el->getNote()}</td>
+                        <td data-href=''>{$el->getName()}</td>
+                        <td data-href=''>{$el->getNote()}</td>
                     </tr>\n
         END;
     }

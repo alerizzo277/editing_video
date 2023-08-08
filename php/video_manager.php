@@ -37,7 +37,7 @@ if(isset($_GET["operation"])){
             header("Location: " . VIDEO_MANAGER . "?operation=select_video&id=" . $video->getId());
             break;
         case "delete_video":
-            delete($pdo);
+            delete($pdo, $video);
             header("Location: " . getPreviusPage() . "?video_deleted=true");
             break;
         case "multiple_video_delete":
@@ -73,24 +73,22 @@ function update($pdo, $video, $person){
     }
 }
 
-function delete($pdo){
-    echo $_SERVER['QUERY_STRING']."<br>";
-    if(isset($_GET["id"])){
-        try{
-            $id = intval($_GET["id"]);
-            deleteVideoFromId($pdo, $id);
-        } catch (Exception $e) {echo 'Eccezione: ',  $e->getMessage(), "\n";}
-    }
+function delete($pdo, $video){
+    try{
+        if (deleteFile("../{$video->getPath()}")){
+            deleteVideoFromId($pdo, $video->getId());
+            $_SESSION["video"] = null;
+        }
+    } catch (Exception $e) {echo 'Eccezione: ',  $e->getMessage(), "\n";}
 }
 
 function multipleDelete($pdo){
 	foreach($_POST["id"] as $el){
         try{
             $video = getVideoFromId($pdo, $el);
-            if(file_exists("../{$video->getPath()}")){   
-                unlink("../{$video->getPath()}");
+            if (deleteFile("../{$video->getPath()}")){
+                deleteVideoFromId($pdo, $el);
             }
-            deleteVideoFromId($pdo, $el);
         } catch (Exception $e) {echo 'Eccezione: ',  $e->getMessage(), "\n";}
 	}
 }

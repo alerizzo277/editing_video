@@ -376,6 +376,7 @@ function insertNewVideo($pdo, $video){
     return $ris;
 }
 
+
 /**
  * @param PDO La connessione al db
  * @param Video $video Istanza della classe Video, che contiene i valori da inserie
@@ -580,7 +581,6 @@ function updateVideo($pdo, $video){
 }
 
 
-
 /**
  * @return string restituisce il link alla pagina corrente
  */
@@ -603,3 +603,13 @@ function getPreviusPage(){
     return $_SESSION["previus_page"];
 }
 
+/**
+ * @param string Elimina il file specificato, se esiste
+ * @return bool true se il file è stato eliminato, false se il file non esiste o l'eliminazione non è andata a buon fine
+ */
+function deleteFile($path_file){
+    if(file_exists($path_file)){   
+        return unlink($path_file);
+    }
+    return false;
+}
