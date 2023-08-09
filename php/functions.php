@@ -406,7 +406,7 @@ function insertNewClip($pdo, $clip, $path_original_video){
  */
 function getClipsFromVideo($pdo, $path_video){
     $videos = array();
-    $query = "SELECT V.id, V.locazione, V.nome, V.autore, V.nota FROM video V INNER JOIN clips_video CV ON V.locazione = CV.locazione_clip WHERE CV.locazione_video_originale = '$path_video'";
+    $query = "SELECT V.id, V.locazione, V.nome, V.autore, V.nota, V.sessione FROM video V INNER JOIN clips_video CV ON V.locazione = CV.locazione_clip WHERE CV.locazione_video_originale = '$path_video'";
     $statement = $pdo->query($query);
     $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
     if ($publishers) {

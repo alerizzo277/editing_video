@@ -1,8 +1,8 @@
 video {
-  /*max-width: 640;
-  max-height: 342;*/
-  max-width: 50;
-  max-height: 50;
+  /*width: 640px;
+  height: 360px;*/
+  width: 908px;
+  height: 511px;
 }
 
 .message{

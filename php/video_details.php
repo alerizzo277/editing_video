@@ -19,7 +19,6 @@ if(isset($_SESSION["video"])){
     $video = unserialize($_SESSION["video"]);
     $filename = basename($video->getPath(), ".mp4");
 } elseif (isset($_GET["video_deleted"])) {
-    
     echo "<p class=\"message\">Video Eliminato correttamente</p>";
 } else{
     http_response_code(404);
@@ -27,10 +26,8 @@ if(isset($_SESSION["video"])){
     die();
 }
 
-
 if(isset($_SESSION["person"])){
     $person = unserialize($_SESSION["person"]);
-    //  myVarDump($person);
 }
 else{
     header("Location: ../".INDEX);
@@ -49,19 +46,13 @@ else{
     <h1>Dettagli Video</h1>
 </head>
 
-<style>
-    body {
-        background-color: pink;
-    }
-</style>
-
 <body>
     <a class="button" href="../index.php">Home</a><br>
     <video id="<?php echo $filename ?>" controls muted autoplay>
         <source src="<?php if($video != null){echo "../{$video->getPath()}";} ?>" type="video/mp4">
     </video>
 
-    <form action="<?php echo VIDEO_MANAGER?>?operation=update_video&id=<?php if($video != null){echo $video->getId();} ?>" method="post" onsubmit="confirm('Confermi?')">
+    <form action="<?php echo VIDEO_MANAGER?>?operation=update_video" method="post" onsubmit="confirm('Confermi?')">
         <fieldset>
             <legend>Modifica Nome e Descrizione</legend>
             <!--<input type="text" name="timing_video" id="timing_video" readonly>-->
@@ -117,20 +108,19 @@ else{
 
     <div id="screen_area" class="grid-container" hidden>
         <?php
-            $screenshots = getScreenshotsFromVideo($pdo, $_SESSION["path_video"]);
+            $screenshots = getScreenshotsFromVideo($pdo, $video->getPath());
             try{
                 foreach ($screenshots as $el){
-                    $img_name = substr($el->getPath(), strpos($el->getPath(), "/") + 1);
+                    $img_name = ($el->getName() == null) ? basename($el->getPath(), ".jpg") : $el->getName();
                     echo <<< END
                         <div class="grid-item">
                             <a href="screen_details.php?id={$el->getId()}">
                                 <img id="{$el->getId()}" src="../{$el->getPath()}" alt="$img_name" width="426" height="240">
                             </a>
                             <br>
-                            <a href="screen_details.php?id={$el->getId()}&timing_video="">
+                            <a href="screen_details.php?id={$el->getId()}&timing_video=">$img_name</a>
+                        </div>\n
                     END;
-                    echo ($el->getName() == null) ? $img_name : $el->getName();
-                    echo "</a>\n\t</div>\n";
                 }
             } catch (Exception $e) {
                 echo 'Eccezione: ',  $e->getMessage(), "\n";

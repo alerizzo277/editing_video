@@ -4,9 +4,12 @@ session_start();
 include 'db_connection.php';
 include 'functions.php';
 include 'classes/Screen.php';
+include 'classes/Video.php';
+include 'classes/Person.php';
+
+include 'head.php';
 
 setPreviusPage();
-
 ?>
 
 <!DOCTYPE html>
@@ -35,7 +38,7 @@ setPreviusPage();
 $pdo = get_connection();
 
 try{               
-    $screenahots = getScreenshotsFromVideo($pdo, $_SESSION["path_video"]);
+    $screenahots = getScreenshotsFromVideo($pdo, $video->getPath());
     foreach($screenahots as $el){
         echo <<<END
                     <tr class='clickable-row'>

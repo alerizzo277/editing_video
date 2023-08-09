@@ -42,11 +42,13 @@ setPreviusPage();
                     //$videos = getVideosFromUser($pdo, "vincenzo.italiano@gmail.com");
                     $videos = getVideosFromUser($pdo, $person->getEmail());
                     foreach($videos as $el){
+                        $link = VIDEO_MANAGER . "?operation=select_video&id={$el->getId()}";
                         echo <<<END
-                                    <tr class='clickable-row'>
-                                        <td><input type="checkbox" id="{$el->getId()}" name="id[]" value="{$el->getId()}"></td>        
+                                <tr class='clickable-row'>
+                                    <td><input type="checkbox" id="{$el->getId()}" name="id[]" value="{$el->getId()}"></td>        
+                                    <td data-href='$link'>{$el->getName()}</td>
+                                </tr>\n
                         END;
-                        echo "\n<td data-href='".VIDEO_MANAGER."?operation=select_video&id={$el->getId()}'>{$el->getName()}</td></tr>\n";
                     }
                 } catch (Exception $e) {echo 'Eccezione: ',  $e->getMessage(), "\n";}
                 ?>

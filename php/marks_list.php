@@ -4,10 +4,14 @@ session_start();
 include 'db_connection.php';
 include 'functions.php';
 include 'classes/Mark.php';
+include 'classes/Video.php';
+include 'classes/Person.php';
 
 //if(isPageRefreshed()){
     setPreviusPage();
 //}
+
+include 'head.php';
 
 ?>
 
@@ -38,7 +42,7 @@ include 'classes/Mark.php';
 $pdo = get_connection();
 
 try{               
-    $marks = getMarksFromVideo($pdo, $_SESSION["path_video"]);
+    $marks = getMarksFromVideo($pdo, $video->getPath());
     foreach($marks as $el){
         echo <<<END
                     <tr class='clickable-row'>

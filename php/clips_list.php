@@ -4,6 +4,10 @@ session_start();
 include 'db_connection.php';
 include 'functions.php';
 include 'classes/Video.php';
+include 'classes/Person.php';
+
+include 'head.php';
+
 ?>
 
 <!DOCTYPE html>
@@ -32,13 +36,14 @@ include 'classes/Video.php';
 $pdo = get_connection();
 
 try{               
-    $clips = getClipsFromVideo($pdo, $_SESSION["path_video"]);
+    $clips = getClipsFromVideo($pdo, $video->getPath());
     foreach($clips as $el){
+        $link = "../" . VIDEO_MANAGER . "?operation=select_video&id={$el->getId()}";
         echo <<<END
                     <tr class='clickable-row'>
                         <td><input type="checkbox" id="{$el->getId()}" name="id[]" value="{$el->getId()}"></td>
-                        <td data-href=''>{$el->getName()}</td>
-                        <td data-href=''>{$el->getNote()}</td>
+                        <td data-href='$link'>{$el->getName()}</td>
+                        <td data-href='$link'>{$el->getNote()}</td>
                     </tr>\n
         END;
     }
