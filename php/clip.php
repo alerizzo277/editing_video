@@ -24,7 +24,7 @@ $pdo = get_connection();
 </head>
 
 <body>
-    <a href="../index.php">Home</a><br>
+    <a href="../index.php" class="button">Home</a><br>
     <video id="<?php echo $video->getId() ?>" controls muted autoplay>
             <source src="<?php echo "../{$video->getPath()}";?>" type="video/mp4">
     </video>
@@ -72,5 +72,4 @@ $pdo = get_connection();
     if (clip != null){
         document.getElementById("clip").hidden = false;
     }
-
 </script>

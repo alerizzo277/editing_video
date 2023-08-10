@@ -2,7 +2,7 @@
 
 define("INDEX", "index.php");
 
-define("EDITING_VIDEO", "editing.php");
+define("EDITING_VIDEO", "editing_video.php");
 
 define("VIDEO_MANAGER", "video_manager.php");
 define("VIDEOS_LIST", "videos_list.php");
@@ -19,7 +19,6 @@ define("MARKS_LIST", "marks_list.php");
 define("SCREEN_DETAILS", "screen_details.php");
 define("SCREEN_MANAGER", "screen_manager.php");
 define("SCREENSHOTS_LIST", "screenshots_list.php");
-
 
 /**
  * mi serve per fare dei test sui valori delle variabili
@@ -212,7 +211,7 @@ function insertNewMark($pdo, $mark){
             ':nome' => $mark->getName(),
             ':note' => $mark->getNote(),
         ]);
-    } catch (Exception $e){echo "Eccezione:" . $e->getMessage();}
+    } catch (Exception $e){myVarDump($e); echo "Eccezione:" . $e->getMessage();}
     return $ris;
 }
 

@@ -83,7 +83,7 @@ else{
                 <th>Nome</th>
             </tr>
                 <?php
-                    $marks = getMarksFromVideo($pdo, $_SESSION["path_video"]);
+                    $marks = getMarksFromVideo($pdo, $video->getPath());
                     try{
                         if ($marks != null){    
                             foreach ($marks as $el){

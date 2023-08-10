@@ -6,11 +6,13 @@ include 'functions.php';
 include 'classes/Mark.php';
 include 'classes/Screen.php';
 include 'classes/Video.php';
+include 'classes/Person.php';
 
-setPreviusPage();
-$filename = basename($_SESSION["path_video"], ".mp4");
+include 'head.php';
+
+$filename = basename($video->getPath(), ".mp4");
 $pdo = get_connection();
-$video = getVideoFromPath($pdo, $_SESSION["path_video"]);
+setPreviusPage();
 ?>
 
 <!DOCTYPE html>
@@ -32,11 +34,10 @@ $video = getVideoFromPath($pdo, $_SESSION["path_video"]);
 </style>
 
 <body>
-
     <a href="../index.php" class="button">Home</a><br>
 
     <video id="<?php echo $filename ?>" controls muted autoplay>
-        <source src="<?php echo"../{$_SESSION["path_video"]}" ?>" type="video/mp4">
+        <source src="<?php echo"../{$video->getPath()}" ?>" type="video/mp4">
     </video>
     <form action="screen_manager.php?operation=get_screen" method="post">
         <input type="text" name="timing_video" id="timing_video" readonly>
@@ -44,7 +45,7 @@ $video = getVideoFromPath($pdo, $_SESSION["path_video"]);
         <input type="submit" value="Screen">
     </form>
 
-    <a href="<?php if($video != null){echo "clip.php?id={$video->getId()}\"";}?>" class="button">Vai a Estrai Clip</a>
+    <a href="<?php if($video != null){echo CLIP."?id={$video->getId()}\"";}?>" class="button">Vai a Estrai Clip</a>
     <a href="clips_list.php" class="button">Gestione clip</a>
     <a href="marks_list.php" class="button">Gestione segnaposti</a>
     <a href="video_details.php?id=<?php if($video != null){echo "{$video->getId()}\"";}?>" class="button">Dettagli Video</a>
@@ -76,20 +77,22 @@ $video = getVideoFromPath($pdo, $_SESSION["path_video"]);
                 <th>Nome</th>
             </tr>
                 <?php
-                    $marks = getMarksFromVideo($pdo, $_SESSION["path_video"]);
+                    $marks = getMarksFromVideo($pdo, $video->getPath());
                     try{
                         if ($marks != null){    
                             foreach ($marks as $el){
                                 $name = ($el->getName() == null) ? "-" : $el->getName();
+                                $timing = timing_format_from_db_to_int($el->getTiming());
                                 echo <<< END
                                 <div id="{$el->getId()}">
                                     <tr>
                                         <td>{$el->getTiming()}</td>
                                         <td>$name</td>
                                         <td><a href="mark_details.php?id={$el->getId()}">Dettagli</a></td>
+                                        <td><a href="javascript:goToTiming(document.getElementById('{$filename}'), '$timing')">Vai al Timing</a></td>
+                                    </tr>
+                                </div>\n
                                 END;
-                                $timing = timing_format_from_db_to_int($el->getTiming());
-                                echo "<td><a href=\"javascript:goToTiming(document.getElementById('{$filename}'), '$timing')\">Vai al Timing</a></td>\n\t</tr>\n\t</div>\n";
                             }
                         }
                     } catch (Exception $e) {
@@ -103,7 +106,7 @@ $video = getVideoFromPath($pdo, $_SESSION["path_video"]);
 
     <div id="screen_area" class="grid-container">
         <?php
-            $screenshots = getScreenshotsFromVideo($pdo, $_SESSION["path_video"]);
+            $screenshots = getScreenshotsFromVideo($pdo, $video->getPath());
             try{
                 foreach ($screenshots as $el){
                     $img_name = substr($el->getPath(), strpos($el->getPath(), "/") + 1);
@@ -123,6 +126,8 @@ $video = getVideoFromPath($pdo, $_SESSION["path_video"]);
             }
         ?>
     </div>
+
+    <div id="snackbar">Esiste già un segnaposto con quel minutaggio</div>
 
 </body>
 
@@ -164,11 +169,15 @@ $video = getVideoFromPath($pdo, $_SESSION["path_video"]);
             timing = parseFloat(timing);
             document.getElementById("<?php echo $filename?>").currentTime = timing;
         }
+
+        let message = findGetParameter("message");
+        if (timing != "mark_exists") {
+            showSnackbar();
+        }
     }
 
     function goToTiming(video, timing){
         video.currentTime = timing;
         video.pause();
     }
-
 </script>
