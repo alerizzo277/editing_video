@@ -8,6 +8,9 @@ include 'classes/Screen.php';
 include 'classes/Video.php';
 include 'classes/Person.php';
 
+include 'head.php';
+
+/*
 $video = null;
 $person = null;
 $filename = null;
@@ -15,15 +18,14 @@ $path_video = null;
 
 if(isset($_SESSION["video"])){
     $video = unserialize($_SESSION["video"]);
-    $filename = basename($video->getPath(), ".mp4");
 }
 if(isset($_SESSION["person"])){
     $person = unserialize($_SESSION["person"]);
-    myVarDump($person);
+    //myVarDump($person);
 }
 else{
     header("Location: ../".INDEX);
-}
+}*/
 
 $pdo = get_connection();
 

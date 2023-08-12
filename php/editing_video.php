@@ -171,7 +171,7 @@ setPreviusPage();
         }
 
         let message = findGetParameter("message");
-        if (timing != "mark_exists") {
+        if (message == "mark_exists") {
             showSnackbar();
         }
     }

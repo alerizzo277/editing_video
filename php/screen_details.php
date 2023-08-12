@@ -4,6 +4,10 @@ session_start();
 include 'db_connection.php';
 include 'functions.php';
 include 'classes/Screen.php';
+include 'classes/Video.php';
+include 'classes/Person.php';
+
+include 'head.php';
 
 ?>
 

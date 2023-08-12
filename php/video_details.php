@@ -118,7 +118,7 @@ else{
                                 <img id="{$el->getId()}" src="../{$el->getPath()}" alt="$img_name" width="426" height="240">
                             </a>
                             <br>
-                            <a href="screen_details.php?id={$el->getId()}&timing_video=">$img_name</a>
+                            <a href="screen_details.php?id={$el->getId()}">$img_name</a>
                         </div>\n
                     END;
                 }
