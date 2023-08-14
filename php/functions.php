@@ -612,3 +612,31 @@ function deleteFile($path_file){
     }
     return false;
 }
+
+
+/** Restitiusce le sessioni relative all'email specificata
+ * @param PDO La connessione al db
+ * @param string $email 
+ * @return Session la sessione
+ */
+function getSessionsFromEmail($pdo, $email){
+    $sessions = array();
+    $query = "SELECT * FROM sessioni_registrazione WHERE autore = '$email'";
+    $statement = $pdo->query($query);
+    $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
+    if ($publishers) {
+        foreach ($publishers as $publisher) {
+            try{                
+                $id = $publisher['id'];
+                $autore = $publisher['autore'];
+                $data_ora_inizio = $publisher['data_ora_inizio'];
+                $data_ora_fine = $publisher['data_ora_fine'];
+                $session = new Session($id, $autore, $data_ora_inizio, $data_ora_fine);
+                array_push($sessions, $session);
+            } catch (Exception $e) {
+                echo 'Eccezione: ',  $e->getMessage(), "\n";
+            }
+        }
+    }
+    return $sessions;
+}
