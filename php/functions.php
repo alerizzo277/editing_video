@@ -20,6 +20,8 @@ define("SCREEN_DETAILS", "screen_details.php");
 define("SCREEN_MANAGER", "screen_manager.php");
 define("SCREENSHOTS_LIST", "screenshots_list.php");
 
+define("SESSIONS_LIST", "sessions_list.php");
+
 /**
  * mi serve per fare dei test sui valori delle variabili
  * aggiunge una eventuale descrizione da stampare e va a capo dopo la stampa 
@@ -498,6 +500,37 @@ function getVideoFromPath($pdo, $path){
     return $video;
 }
 
+/**
+ * Restituisce tutti i video relativi ad una sessione
+ * @param PDO La connessione al db
+ * @param string $email indica l'email dell'autore del video
+ * @param integer $session indica la sessione di cui si vogliono ottenere i video
+ * @return array() Video
+*/
+function getVideosFromSession($pdo, $email, $session){
+    $videos = array();
+    $query = "SELECT * FROM video WHERE autore = '$email' AND sessione = '$session'";
+    $statement = $pdo->query($query);
+    $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
+    if ($publishers) {
+        foreach ($publishers as $publisher) {
+            try{                
+                $id = $publisher['id'];
+                $path = $publisher['locazione'];
+                $name = $publisher['nome'];
+                $author = $publisher['autore'];
+                $note = $publisher['nota'];
+                $session = $publisher['sessione'];
+                $video = new Video($id, $path, $name, $note, $author, $session);
+                array_push($videos, $video);
+            } catch (Exception $e) {
+                echo 'Eccezione: ',  $e->getMessage(), "\n";
+            }
+        }
+    }
+
+    return $videos;
+}
 
 /** Restitiusce la persona con l'email specificata
  * @param PDO La connessione al db
