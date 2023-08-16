@@ -5,12 +5,14 @@ class Session {
     private $author;
     private $start_date_time;
     private $end_date_time;
+    private $reservation;
 
-    function __construct($id, $author, $start_date_time, $end_date_time){
+    function __construct($id, $author, $start_date_time, $end_date_time, $reservation){
         $this->id = $id;
         $this->author = $author;
         $this->start_date_time = $start_date_time;
         $this->end_date_time = $end_date_time;
+        $this->reservation = $reservation;
     }
 
     /**
@@ -81,6 +83,24 @@ class Session {
     public function setEndDateTime($end_date_time): self
     {
         $this->end_date_time = $end_date_time;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of reservation
+     */
+    public function getReservation()
+    {
+        return $this->reservation;
+    }
+
+    /**
+     * Set the value of reservation
+     */
+    public function setReservation($reservation): self
+    {
+        $this->reservation = $reservation;
 
         return $this;
     }

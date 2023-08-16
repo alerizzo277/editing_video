@@ -11,6 +11,8 @@ include 'head.php';
 
 $pdo = get_connection();
 $sessions = getSessionsFromEmail($pdo, $person->getEmail());
+//$reservations = per avere più info sulla sessione, posso estrarre i dati della prenotazione legta alla sessione
+
 ?>
 
 <!DOCTYPE html>
@@ -32,11 +34,13 @@ $sessions = getSessionsFromEmail($pdo, $person->getEmail());
             </tr>
             <?php
                 foreach($sessions as $el){
+                    myVarDump($el);
+                    $link = SESSION . "?id=" . $el->getId();
                     echo <<< END
-                        <tr>
-                            <td>{$el->getId()}</td>
-                            <td>{$el->getStartDateTime()}</td>
-                            <td>{$el->getEndDateTime()}</td>
+                        <tr class='clickable-row'>
+                            <td data-href='$link'>{$el->getId()}</td>
+                            <td data-href='$link'>{$el->getStartDateTime()}</td>
+                            <td data-href='$link'>{$el->getEndDateTime()}</td>
                         </tr>\n
                     END;
                 }
@@ -44,6 +48,16 @@ $sessions = getSessionsFromEmail($pdo, $person->getEmail());
         </table>
     </body>
 </html>
+
+<script>
+    jQuery(document).ready(function($) {
+    $(".clickable-row td:not(:first-child)").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>
+
+
 
 <?php
 

@@ -21,6 +21,7 @@ define("SCREEN_MANAGER", "screen_manager.php");
 define("SCREENSHOTS_LIST", "screenshots_list.php");
 
 define("SESSIONS_LIST", "sessions_list.php");
+define("SESSION", "session.php");
 
 /**
  * mi serve per fare dei test sui valori delle variabili
@@ -664,7 +665,8 @@ function getSessionsFromEmail($pdo, $email){
                 $autore = $publisher['autore'];
                 $data_ora_inizio = $publisher['data_ora_inizio'];
                 $data_ora_fine = $publisher['data_ora_fine'];
-                $session = new Session($id, $autore, $data_ora_inizio, $data_ora_fine);
+                $prenotazione = $publisher['prenotazione'];
+                $session = new Session($id, $autore, $data_ora_inizio, $data_ora_fine, $prenotazione);
                 array_push($sessions, $session);
             } catch (Exception $e) {
                 echo 'Eccezione: ',  $e->getMessage(), "\n";
