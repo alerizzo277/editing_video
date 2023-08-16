@@ -14,7 +14,7 @@ if(isset($_SESSION["person"])){//se la person a è salvata, significa che è log
     $person = unserialize($_SESSION["person"]);
 }
 else {
-    header("Location: " . INDEX);
+    header("Location: ../" . INDEX);
 }
 
 setPreviusPage();
