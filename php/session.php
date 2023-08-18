@@ -34,11 +34,11 @@ $videos = getVideosFromSession($pdo, $person->getEmail(), $id_session);
             </tr>
             <?php
                 foreach($videos as $el){
-
+                    $link = VIDEO_MANAGER . "?operation=select_video&id={$el->getId()}";
                     echo <<< END
-                    <tr>
-                        <td>{$el->getName()}</td>
-                        <td>{$el->getNote()}</td>
+                    \n<tr class='clickable-row'>
+                        <td data-href='$link'>{$el->getName()}</td>
+                        <td data-href='$link'>{$el->getNote()}</td>
                     </tr>\n
                     END;
                 }
@@ -46,3 +46,11 @@ $videos = getVideosFromSession($pdo, $person->getEmail(), $id_session);
         </table>
     </body>
 </html>
+
+<script>
+    jQuery(document).ready(function($) {
+    $(".clickable-row td:not(:first-child)").click(function() {
+        window.location = $(this).data("href");
+    });
+});
+</script>

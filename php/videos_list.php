@@ -31,6 +31,7 @@ setPreviusPage();
         <h1>Scelta video</h1>
     </head>
     <body>
+        <a class="button" href="../index.php">Home</a><br>
         <form action="<?php echo VIDEO_MANAGER;?>?operation=multiple_video_delete" method="post" onsubmit="confirm('Sicuro di eliminare i video selezionati?')">
             <table class="paleBlueRows">
                 <tr>
@@ -60,8 +61,8 @@ setPreviusPage();
 
 <script>
     jQuery(document).ready(function($) {
-    $(".clickable-row td:not(:first-child)").click(function() {
-        window.location = $(this).data("href");
+        $(".clickable-row td:not(:first-child)").click(function() {
+            window.location = $(this).data("href");
+        });
     });
-});
 </script>

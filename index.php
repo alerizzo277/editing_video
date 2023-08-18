@@ -23,7 +23,7 @@ if(!isset($_SESSION["person"])){
 }
 else{
     header("Location: php/" . VIDEOS_LIST);
-    //header("Location: php/" . SESSIONS_LIST); 
+    //header("Location: php/home.php");
 }
 ?>
 
