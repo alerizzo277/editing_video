@@ -9,8 +9,7 @@ include "classes/Video.php";
 
 include 'head.php';
 
-//$id_session = $_GET["session"];
-$id_session = 1;
+$id_session = intval($_GET["id"]);
 $pdo = get_connection();
 $videos = getVideosFromSession($pdo, $person->getEmail(), $id_session);
 ?>
