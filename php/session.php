@@ -49,7 +49,7 @@ $videos = getVideosFromSession($pdo, $person->getEmail(), $id_session);
 
 <script>
     jQuery(document).ready(function($) {
-    $(".clickable-row td:not(:first-child)").click(function() {
+    $(".clickable-row td").click(function() {
         window.location = $(this).data("href");
     });
 });

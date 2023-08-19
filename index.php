@@ -22,8 +22,8 @@ if(!isset($_SESSION["person"])){
     $_SESSION["person"] = serialize($person);
 }
 else{
-    header("Location: php/" . VIDEOS_LIST);
-    //header("Location: php/home.php");
+    //header("Location: php/" . VIDEOS_LIST);
+    header("Location: php/home.php");
 }
 ?>
 

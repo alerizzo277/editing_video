@@ -675,3 +675,114 @@ function getSessionsFromEmail($pdo, $email){
     }
     return $sessions;
 }
+
+/** Restitiusce la prenotazione relativa all'id specificato
+ * @param PDO La connessione al db
+ * @param integer $id 
+ * @return Reservation la prenotazione cercata
+ */
+function getReservationFromId($pdo, $id){
+    $reservation = null;
+    $query = "SELECT * FROM prenotazioni WHERE id = '$id'";
+    $statement = $pdo->query($query);
+    $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
+    if ($publishers) {
+        foreach ($publishers as $publisher) {
+            try{                
+                $id = $publisher['id'];
+                $autore = $publisher['autore_prenotazione'];
+                $data_ora_inizio = $publisher['data_ora_inizio'];
+                $data_ora_fine = $publisher['data_ora_fine'];
+                $team = $publisher['id_squadra'];
+                $calendar_event = $publisher['id_calendar_events'];
+                $note = $publisher['nota'];
+                $reservation = new Reservation($id, $autore, $data_ora_inizio, $data_ora_fine, $team, $calendar_event, $note);
+            } catch (Exception $e) {
+                echo 'Eccezione: ',  $e->getMessage(), "\n";
+            }
+        }
+    }
+    return $reservation;
+}
+
+/** Restitiusce la squadra relativa all'id specificato
+ * @param PDO La connessione al db
+ * @param integer $id 
+ * @return Team la squadra cercata
+ */
+function getTeamFromId($pdo, $id){
+    $team = null;
+    $query = "SELECT * FROM squadre WHERE id = '$id'";
+    $statement = $pdo->query($query);
+    $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
+    if ($publishers) {
+        foreach ($publishers as $publisher) {
+            try{                
+                $id = $publisher['id'];
+                $name = $publisher['nome'];
+                $society = $publisher['societa'];
+                $sport = $publisher['sport'];
+                $code = $publisher['codice'];
+                $team = new Team($id, $name, $society, $sport, $code);
+            } catch (Exception $e) {
+                echo 'Eccezione: ',  $e->getMessage(), "\n";
+            }
+        }
+    }
+    return $team;
+}
+
+/** Restitiusce la partita relativa all'id specificato
+ * @param PDO La connessione al db
+ * @param integer $id 
+ * @return Game la partita cercata
+ */
+function getMatchFromId($pdo, $id){
+    $match = null;
+    $query = "SELECT * FROM partite WHERE id = '$id'";
+    $statement = $pdo->query($query);
+    $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
+    if ($publishers) {
+        foreach ($publishers as $publisher) {
+            try{                
+                $id = $publisher['id'];
+                $team = $publisher['id_squadra_casa'];
+                $start_date_time = $publisher['data_ora_inizio'];
+                $end_date_time = $publisher['data_ora_fine'];
+                $sport = $publisher['sport'];
+                $reservation = $publisher['prenotazione'];
+                $match = new Game($id, $team, $start_date_time, $end_date_time, $sport, $reservation);
+            } catch (Exception $e) {
+                echo 'Eccezione: ',  $e->getMessage(), "\n";
+            }
+        }
+    }
+    return $match;
+}
+
+/** Restitiusce l'allenamento relativo all'id specificato
+ * @param PDO La connessione al db
+ * @param integer $id 
+ * @return Training l'allenamento cercato
+ */
+function getTrainingFromId($pdo, $id){
+    $training = null;
+    $query = "SELECT * FROM allenamento WHERE id = '$id'";  
+    $statement = $pdo->query($query);
+    $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
+    if ($publishers) {
+        foreach ($publishers as $publisher) {
+            try{                
+                $id = $publisher['id'];
+                $team = $publisher['id_squadra'];
+                $start_date_time = $publisher['data_ora_inizio'];
+                $end_date_time = $publisher['data_ora_fine'];
+                $reservation = $publisher['prenotazione'];
+                $training = new Training($id, $team, $start_date_time, $end_date_time, $reservation);
+            } catch (Exception $e) {
+                echo 'Eccezione: ',  $e->getMessage(), "\n";
+            }
+        }
+    }
+    return $training;
+}
