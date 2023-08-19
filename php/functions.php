@@ -786,3 +786,20 @@ function getTrainingFromId($pdo, $id){
     }
     return $training;
 }
+
+/**
+ * estrae la minuiatura di un video, il primo frame del video
+ * @param string $path_video path del video
+ * @return string $thumb la path alla thumbnail
+ */
+function getVideoThumbnails($path_video){
+    $thumb = "../thumbnails/thumb_".basename($path_video, ".mp4").".jpg";
+    if (!file_exists($thumb)){
+        $ffmpeg = FFMpeg\FFMpeg::create();
+        $video = $ffmpeg->open("../".$path_video);
+        $video
+            ->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(0))
+            ->save($thumb);
+    }
+    return $thumb;
+}

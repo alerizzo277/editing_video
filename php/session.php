@@ -1,6 +1,7 @@
 <?php
 session_start();
 
+include '../vendor/autoload.php';
 include "db_connection.php";
 include "functions.php";
 include "classes/Person.php";
@@ -29,14 +30,17 @@ $videos = getVideosFromSession($pdo, $person->getEmail(), $id_session);
         <a class="button" href="../index.php">Home</a><br>
         <table class="paleBlueRows">
             <tr>
+                <th>Miniatura</th>
                 <th>Nome</th>
                 <th>Note</th>
             </tr>
             <?php
                 foreach($videos as $el){
+                    $thumb = getVideoThumbnails($el->getPath());
                     $link = VIDEO_MANAGER . "?operation=select_video&id={$el->getId()}";
                     echo <<< END
                     \n<tr class='clickable-row'>
+                        <td data-href='$link'><img src="$thumb" alt="thumb {$el->getName()}" width="128" height="96"></td>
                         <td data-href='$link'>{$el->getName()}</td>
                         <td data-href='$link'>{$el->getNote()}</td>
                     </tr>\n
