@@ -47,6 +47,7 @@ if(isset($_GET["id"])){
                     <input type="submit" value="Elmina" formaction="screen_manager.php?operation=delete_screen&id={$screen->getId()}">
                 </fieldset>
             </form>
+            <a href="../{$screen->getPath()}" class="button" download>Scarica</a>
             </div>
         END;
         if(isset($_GET["updated"])){

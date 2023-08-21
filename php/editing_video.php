@@ -49,7 +49,7 @@ setPreviusPage();
     <a href="clips_list.php" class="button">Gestione clip</a>
     <a href="marks_list.php" class="button">Gestione segnaposti</a>
     <a href="video_details.php?id=<?php if($video != null){echo "{$video->getId()}\"";}?>" class="button">Dettagli Video</a>
-
+    <a href="../<?php echo $video->getPath() ?>" class="button" download>Scarica</a>
 
     <div id="mark_details" hidden>
         <form action="mark_manager.php?operation=new_mark" method="post">

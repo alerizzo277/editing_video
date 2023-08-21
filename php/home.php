@@ -4,8 +4,6 @@ session_start();
 include 'functions.php';
 include 'classes/Person.php';
 
-include 'head.php';
-
 ?>
 
 <!DOCTYPE html>

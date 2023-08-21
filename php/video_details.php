@@ -71,6 +71,7 @@ else{
         <a href="clips_list.php" class="button">Gestione clip</a>
         <a href="marks_list.php" class="button">Gestione segnaposti</a>
         <a href="screenshots_list.php" class="button">Gestione screenshots</a>
+        <a href="../<?php echo $video->getPath() ?>" class="button" download>Scarica</a>
     </div>
 
     <button type="button" onclick="showMarks()" id="show_marks">Mostra i segnaposti</button>

@@ -28,7 +28,7 @@ else{
 ?>
 
 <link rel="stylesheet" href="css/style.css" method="post">
-<form action="<?php echo "php/".VIDEOS_LIST ?>">
+<form action="<?php echo "php/home.php"?>">
     <fieldset>
         <legend>Test Login form</legend>
         <label>Email</label>
