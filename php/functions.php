@@ -420,7 +420,8 @@ function getClipsFromVideo($pdo, $path_video){
                 $author = $publisher['autore'];
                 $note = $publisher['nota'];
                 $session = $publisher['sessione'];
-                $video = new Video($id, $path, $name, $note, $author, $session);
+                $camera = $publisher['telecamera'];
+                $video = new Video($id, $path, $name, $note, $author, $session, $camera);
                 array_push($videos, $video);
             } catch (Exception $e) {
                 echo 'Eccezione: ',  $e->getMessage(), "\n";
@@ -462,7 +463,8 @@ function getVideoFromId($pdo, $id){
                 $author = $publisher['autore'];
                 $note = $publisher['nota'];
                 $session = $publisher['sessione'];
-                $video = new Video($id, $path, $name, $note, $author, $session);
+                $camera = $publisher['telecamera'];
+                $video = new Video($id, $path, $name, $note, $author, $session, $camera);
             } catch (Exception $e) {
                 echo 'Eccezione: ',  $e->getMessage(), "\n";
             }
@@ -491,7 +493,8 @@ function getVideoFromPath($pdo, $path){
                 $author = $publisher['autore'];
                 $note = $publisher['nota'];
                 $session = $publisher['sessione'];
-                $video = new Video($id, $path, $name, $note, $author, $session);
+                $camera = $publisher['telecamera'];
+                $video = new Video($id, $path, $name, $note, $author, $session, $camera);
             } catch (Exception $e) {
                 echo 'Eccezione: ',  $e->getMessage(), "\n";
             }
@@ -522,7 +525,8 @@ function getVideosFromSession($pdo, $email, $session){
                 $author = $publisher['autore'];
                 $note = $publisher['nota'];
                 $session = $publisher['sessione'];
-                $video = new Video($id, $path, $name, $note, $author, $session);
+                $camera = $publisher['telecamera'];
+                $video = new Video($id, $path, $name, $note, $author, $session, $camera);
                 array_push($videos, $video);
             } catch (Exception $e) {
                 echo 'Eccezione: ',  $e->getMessage(), "\n";
@@ -584,7 +588,8 @@ function getVideosFromUser($pdo, $email){
                 $author = $publisher['autore'];
                 $note = $publisher['nota'];
                 $session = $publisher['sessione'];
-                $video = new Video($id, $path, $name, $note, $author, $session);
+                $camera = $publisher['telecamera'];
+                $video = new Video($id, $path, $name, $note, $author, $session, $camera);
                 array_push($videos, $video);
             } catch (Exception $e) {
                 echo 'Eccezione: ',  $e->getMessage(), "\n";
@@ -802,4 +807,28 @@ function getVideoThumbnails($path_video){
             ->save($thumb);
     }
     return $thumb;
+}
+
+/**
+ * Restitiusce la lista di telecamere usate in una sessione di registrazione
+ * @param PDO La connessione al db
+ * @param integer la sessione cercata 
+ * @return array La lista delle telecamere
+ */
+function getCamerasFromSession($pdo, $session){
+    $cameras = array();
+    $query = "SELECT DISTINCT telecamera FROM video WHERE sessione = '$session'";
+    $statement = $pdo->query($query);
+    $publishers = $statement->fetchAll(PDO::FETCH_ASSOC);
+    if ($publishers) {
+        foreach ($publishers as $publisher) {
+            try{                
+                $id = $publisher['telecamera'];
+                array_push($cameras, $id);
+            } catch (Exception $e) {
+                echo 'Eccezione: ',  $e->getMessage(), "\n";
+            }
+        }
+    }
+    return $cameras;
 }
