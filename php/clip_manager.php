@@ -11,27 +11,14 @@ include 'head.php';
 
 $pdo = get_connection();
 
-/*
-$video = null;
-$person = null;
-if(isset($_SESSION["video"])){
-    $video = unserialize($_SESSION["video"]);
-}
-if(isset($_SESSION["person"])){
-    $person = unserialize($_SESSION["person"]);}
-else{
-    header("Location: ../".INDEX);
-}
-*/
-
 if(isset($_GET["operation"])){
     switch($_GET["operation"]){
         case "new_clip":
             if (isset($_POST["start_timing_trim"]) && isset($_POST["end_timing_trim"])){
                 $clip = newClip($pdo, $video, $person);
                 if(isset($clip)){
-                    $clip = getVideoFromPath($pdo, $clip->getPath());
-                    header("Location: ". CLIP ."?clip={$clip->getId()}");
+                    $clip = getVideoFromPath($pdo, $clip->getPath()); //mi serve estrarre l'id che il db ha assegnato alla nuova clip
+                    header("Location: ". VIDEO_MANAGER ."?operation=select_video&id={$clip->getId()}");
                 }
                 else{header("Location: ". CLIP);}
             }
@@ -63,12 +50,8 @@ function newClip($pdo, $video, $person) {
     $clip_name = "clip_$filename"."_$start"."_$end.mp4";
 
     getClip($start_number, $end_number, $clip_name, $video);
-
-    $clip = new Video(null, "video/$clip_name", basename($clip_name, ".mp4"), "Clip del video{$_SESSION["path_video"]}", $person->getEmail(), $video->getSession());
-    
-    myVarDump($clip);
-    
-    insertNewClip($pdo, $clip, $video->getPath());
+    $clip = new Video(null, "video/$clip_name", basename($clip_name, ".mp4"), "Clip del video{$video->getPath()}", $person->getEmail(), $video->getSession(), $video->getCamera());
+    insertNewClip($pdo, $clip, $clip->getPath());
 
     return $clip;
 }

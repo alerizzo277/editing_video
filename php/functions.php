@@ -364,7 +364,7 @@ function deleteScreenFromId($pdo, $id){
 function insertNewVideo($pdo, $video){
     $ris = null;
     try{
-        $query = 'INSERT INTO video(locazione, nome, autore, nota, sessione) VALUES (:locazione, :nome, :autore, :nota, :sessione)';
+        $query = 'INSERT INTO video(locazione, nome, autore, nota, sessione, telecamera) VALUES (:locazione, :nome, :autore, :nota, :sessione, :telecamera)';
         $statement = $pdo->prepare($query);
         $ris = $statement->execute([
             ':locazione' => $video->getPath(),
@@ -372,6 +372,7 @@ function insertNewVideo($pdo, $video){
             ':autore' => $video->getAuthor(),
             ':nota' => $video->getNote(),
             ':sessione' => $video->getSession(),
+            ':telecamera' => $video->getCamera(),
         ]);
     } catch (Exception $e){echo "Eccezione:" . $e->getMessage();}
 

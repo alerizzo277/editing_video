@@ -54,7 +54,9 @@ $cameras = getCamerasFromSession($pdo, $id_session);
                 END;
                 foreach($videos as $el){
                     if ($el->getCamera() == $cam){
-                        $thumb = getVideoThumbnails($el->getPath());
+                        if(file_exists("../".$el->getPath())){
+                            $thumb = getVideoThumbnails($el->getPath());
+                        }
                         $link = VIDEO_MANAGER . "?operation=select_video&id={$el->getId()}";
                         echo <<< END
                             <tr class='clickable-row'>
@@ -81,7 +83,9 @@ $cameras = getCamerasFromSession($pdo, $id_session);
                 </tr>
                 <?php
                     foreach($videos as $el){
-                        $thumb = getVideoThumbnails($el->getPath());
+                        if(file_exists("../".$el->getPath())){
+                            $thumb = getVideoThumbnails($el->getPath());
+                        }
                         $link = VIDEO_MANAGER . "?operation=select_video&id={$el->getId()}";
                         echo <<< END
                         \n<tr class='clickable-row'>
