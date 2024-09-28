@@ -1,13 +1,11 @@
 <?php
-//serve per lo sviluppo del sito, andrà poi sostituito con il verp login.php
-
 
 /*
 in questa pagina vengono settate una cosa fondamentale per il funzionamento dell'editing:
 - la persona loggata in SESSION come istanza della classse 'Person'. L'istanza verrà serializzata e ad ogni utilizzo de-serializzata
 */
 
-session_start();
+/* session_start();
 
 include "php/db_connection.php";
 include "php/functions.php";
@@ -24,17 +22,49 @@ if(!isset($_SESSION["person"])){
 else{
     //header("Location: php/" . VIDEOS_LIST);
     header("Location: php/home.php");
-}
+} */
 ?>
 
-<link rel="stylesheet" href="css/style.css" method="post">
-<form action="<?php echo "php/home.php"?>">
-    <fieldset>
-        <legend>Test Login form</legend>
-        <label>Email</label>
-        <input type="email" value="email@gmail.com" readonly><br>
-        <label>Password</label>
-        <input type="password" value="password" readonly><br>
-        <input type="submit">
-    </fieldset>
-</form>
+
+<!DOCTYPE html>
+<html class="h-100">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="../js/functions.js"></script>
+    <title>Editing Video</title>
+</head>
+
+<body class="h-100">
+    <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand">
+            <img src="./assets/icon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            Editing Video
+        </a>
+    </nav>
+    <div class="container d-flex justify-content-center mt-5 h-100">
+        <form class="w-50" action="<?php echo "php/home.php"?>">
+            <div class="form-group row">
+                <label for="email" class="col-sm-2 col-form-label">Email</label>
+                <div class="col-sm-10">
+                    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" value="email@gmail.com">
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="password" class="col-sm-2 col-form-label">Password</label>
+                <div class="col-sm-10">
+                    <input type="password" class="form-control" id="password" placeholder="Password" value="password">
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-10">
+                    <input type="submit" class="btn btn-primary">
+                </div>
+            </div>
+        </form>
+    </div>
+</body>
+
+</html>
