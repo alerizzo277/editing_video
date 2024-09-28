@@ -27,7 +27,7 @@ else{
 
 
 <!DOCTYPE html>
-<html class="h-100">
+<html>
 
 <head>
     <meta charset="utf-8">
@@ -37,33 +37,42 @@ else{
     <title>Editing Video</title>
 </head>
 
-<body class="h-100">
-    <nav class="navbar navbar-light bg-light">
+<body class="h-100 bg-light">
+    <nav class="navbar navbar-light bg-primary">
         <a class="navbar-brand">
             <img src="./assets/icon.png" width="30" height="30" class="d-inline-block align-top" alt="">
             Editing Video
         </a>
     </nav>
     <div class="container d-flex justify-content-center mt-5 h-100">
-        <form class="w-50 mt-5" action="<?php echo "php/home.php"?>">
-            <div class="form-group row">
-                <label for="email" class="col-sm-2 col-form-label">Email</label>
-                <div class="col-sm-10">
-                    <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" value="email@gmail.com">
+        <div class="col-3">
+            <img src="./assets/icon.png" width="280" height="280" class="d-inline-block align-top" alt="">
+        </div>
+        <div class="col-9">
+            <form class="mt-5 p-4 bg-white border rounded w-50" action="<?php echo "php/home.php"?>">
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label for="email" class="col-sm-2 col-form-label">Email</label>
+                    </div>
+                    <div class="col-6">
+                        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email" value="email@gmail.com">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group row">
-                <label for="password" class="col-sm-2 col-form-label">Password</label>
-                <div class="col-sm-10">
-                    <input type="password" class="form-control" id="password" placeholder="Password" value="password">
+                <div class="form-group row">
+                    <div class="col-6">
+                        <label for="password" class="col-sm-2 col-form-label">Password</label>
+                    </div>
+                    <div class="col-6">
+                        <input type="password" class="form-control" id="password" placeholder="Password" value="password">
+                    </div>
                 </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-sm-10">
-                    <input type="submit" class="btn btn-secondary">
+                <div class="form-group row">
+                    <div class="col-6">
+                        <input type="submit" class="btn btn-secondary">
+                    </div>
                 </div>
-            </div>
-        </form>
+            </form>
+        </div>
     </div>
 </body>
 
