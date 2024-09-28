@@ -45,7 +45,7 @@ else{
         </a>
     </nav>
     <div class="container d-flex justify-content-center mt-5 h-100">
-        <form class="w-50" action="<?php echo "php/home.php"?>">
+        <form class="w-50 mt-5" action="<?php echo "php/home.php"?>">
             <div class="form-group row">
                 <label for="email" class="col-sm-2 col-form-label">Email</label>
                 <div class="col-sm-10">
@@ -60,7 +60,7 @@ else{
             </div>
             <div class="form-group row">
                 <div class="col-sm-10">
-                    <input type="submit" class="btn btn-primary">
+                    <input type="submit" class="btn btn-secondary">
                 </div>
             </div>
         </form>
