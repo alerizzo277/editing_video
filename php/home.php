@@ -24,6 +24,6 @@ include 'classes/Person.php';
     <body> 
         <a href="<?php echo VIDEOS_LIST?>">Lista dei video</a><br>
         <a href="<?php echo SESSIONS_LIST?>">Lista delle sessioni</a>
-        <p>TEST</p>
+        <p>TEST 2</p>
     </body>
 </html>
