@@ -14,18 +14,26 @@ include 'head.php';
 <html>
     <head>
         <meta charset="utf-8">
-        <link rel="stylesheet" href="../css/style.css">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
         <script src="../js/functions.js"></script>
         <title>Tutti le clip</title>
-        <h1>Tutti le clip </h1>
     </head>
+    <nav class="navbar navbar-dark bg-primary navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../index.php">
+                <img src="../assets/icon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                Editing Video
+            </a>
+        </div>
+    </nav>
     <body>
-        <a href="../index.php" class="button">Home</a><br>
+        <h4 class="m-1">Tutti le clip </h4>
 
-        <div>
+        <div class="container mt-5">
             <form action="clip_manager.php?operation=multiple_clip_delete" method="post">
-                <table class="paleBlueRows">
+                <table class="table table-striped">
                     <tr>
                         <th>Selezione</th>
                         <th>Nome</th>
@@ -50,7 +58,7 @@ try{
 } catch (Exception $e) {echo 'Eccezione: ',  $e->getMessage(), "\n";}
 ?>
                 </table>
-                <input type="submit" value="Elimina">
+                <input class="btn btn-danger" type="submit" value="Elimina">
             </form>
         </div>
     </body>

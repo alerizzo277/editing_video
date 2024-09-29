@@ -20,115 +20,132 @@ setPreviusPage();
 
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="../js/functions.js"></script>
-    <title>Editing video</title>
-    <h1>Editing video</h1>
+    <title>Editing</title>
 </head>
 
-<style>
-    body {
-        background-color: lightblue;
-    }
-</style>
+<nav class="navbar navbar-dark bg-primary navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="../index.php">
+            <img src="../assets/icon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            Editing Video
+        </a>
+    </div>
+</nav>
 
 <body>
-    <a href="../index.php" class="button">Home</a><br>
-
-    <video id="<?php echo $filename ?>" controls muted autoplay>
-        <source src="<?php echo"../{$video->getPath()}" ?>" type="video/mp4">
-    </video>
-    <form action="screen_manager.php?operation=get_screen" method="post">
-        <input type="text" name="timing_video" id="timing_video" readonly>
-        <input type="button" id="mark" onclick="segnaposto()" value="Aggiungi Segnaposto">
-        <input type="submit" value="Screen">
-    </form>
-
-    <a href="<?php if($video != null){echo CLIP."?id={$video->getId()}\"";}?>" class="button">Vai a Estrai Clip</a>
-    <a href="clips_list.php" class="button">Gestione clip</a>
-    <a href="marks_list.php" class="button">Gestione segnaposti</a>
-    <a href="video_details.php?id=<?php if($video != null){echo "{$video->getId()}\"";}?>" class="button">Dettagli Video</a>
-    <a href="../<?php echo $video->getPath() ?>" class="button" download>Scarica</a>
-
-    <div id="mark_details" hidden>
-        <form action="mark_manager.php?operation=new_mark" method="post">
-            <fieldset>
-                <legend>Segnaposto</legend>
-                
-                <label for="timing_mark">Timing:</label>
-                <input type="text" name="timing_mark" id="timing_mark" readonly><br>
-
-                <label for="mark_name">Nome:</label>
-                <input type="text" name="mark_name" id="mark_name"><br>
-
-                <label for="mark_name">Descrizione:</label>
-                <textarea id="mark_note" name="mark_note" rows="2" cols="30"></textarea>
-
-                <input type="submit" value="Salva" onclick="document.getElementById('mark_details').hidden = true">
-            </fieldset>
+    <h4 class="m-2">Editing Video</h4>
+    <div class="container mt-5">
+        <video id="<?php echo $filename ?>" controls muted autoplay>
+            <source src="<?php echo "../{$video->getPath()}" ?>" type="video/mp4">
+        </video>
+        <form action="screen_manager.php?operation=get_screen" method="post">
+            <div class="input-group">
+                <input type="text" class="form-control" name="timing_video" id="timing_video" readonly>
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" id="mark" onclick="segnaposto()">Aggiungi Segnaposto</button>
+                    <button class="btn btn-primary" type="submit">Screen</button>
+                </div>
+            </div>
         </form>
-    </div>
 
-    <div id="marks">
-        <table id="list_marks" class="paleBlueRows">
-            <tr>
-                <th>Minutaggio</th>
-                <th>Nome</th>
-            </tr>
+        <div class="btn-group my-1">
+            <a class="btn btn-secondary" href="<?php if ($video != null) {
+                                                    echo CLIP . "?id={$video->getId()}\"";
+                                                } ?>" class="button">Vai a Estrai Clip</a>
+            <a class="btn btn-secondary" href="clips_list.php" class="button">Gestione clip</a>
+            <a class="btn btn-secondary" href="marks_list.php" class="button">Gestione segnaposti</a>
+            <a class="btn btn-secondary" href="video_details.php?id=<?php if ($video != null) {
+                                                                        echo "{$video->getId()}\"";
+                                                                    } ?>" class="button">Dettagli Video</a>
+            <a class="btn btn-secondary" href="../<?php echo $video->getPath() ?>" class="button" download>Scarica</a>
+        </div>
+
+        <div id="mark_details" hidden>
+            <form action="mark_manager.php?operation=new_mark" method="post">
+                <fieldset>
+                    <legend>Segnaposto</legend>
+                    <div class="form-group">
+                        <label for="timing_mark">Timing:</label>
+                        <input type="text" class="form-control" name="timing_mark" id="timing_mark" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="mark_name">Nome:</label>
+                        <input type="text" class="form-control" name="mark_name" id="mark_name">
+                    </div>
+                    <div class="form-group">
+                        <label for="mark_name">Descrizione:</label>
+                        <textarea class="form-control" id="mark_note" name="mark_note" rows="2" cols="30"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" onclick="document.getElementById('mark_details').hidden = true">Salva</button>
+                </fieldset>
+            </form>
+        </div>
+
+        <div id="marks">
+            <table id="list_marks" class="table table-striped">
+                <tr>
+                    <th>Minutaggio</th>
+                    <th>Nome</th>
+                    <th></th>
+                    <th></th>
+                </tr>
                 <?php
-                    $marks = getMarksFromVideo($pdo, $video->getPath());
-                    try{
-                        if ($marks != null){    
-                            foreach ($marks as $el){
-                                $name = ($el->getName() == null) ? "-" : $el->getName();
-                                $timing = timing_format_from_db_to_int($el->getTiming());
-                                echo <<< END
-                                <div id="{$el->getId()}">
-                                    <tr>
-                                        <td>{$el->getTiming()}</td>
-                                        <td>$name</td>
-                                        <td><a href="mark_details.php?id={$el->getId()}">Dettagli</a></td>
-                                        <td><a href="javascript:goToTiming(document.getElementById('{$filename}'), '$timing')">Vai al Timing</a></td>
-                                    </tr>
-                                </div>\n
-                                END;
-                            }
+                $marks = getMarksFromVideo($pdo, $video->getPath());
+                try {
+                    if ($marks != null) {
+                        foreach ($marks as $el) {
+                            $name = ($el->getName() == null) ? "-" : $el->getName();
+                            $timing = timing_format_from_db_to_int($el->getTiming());
+                            echo <<< END
+                                    <div id="{$el->getId()}">
+                                        <tr>
+                                            <td>{$el->getTiming()}</td>
+                                            <td>$name</td>
+                                            <td><a class="btn btn-primary" href="mark_details.php?id={$el->getId()}">Dettagli</a></td>
+                                            <td><a class="btn btn-primary" href="javascript:goToTiming(document.getElementById('{$filename}'), '$timing')">Vai al Timing</a></td>
+                                        </tr>
+                                    </div>\n
+                                    END;
                         }
-                    } catch (Exception $e) {
-                        echo 'Eccezione: ',  $e->getMessage(), "\n";
                     }
+                } catch (Exception $e) {
+                    echo 'Eccezione: ',  $e->getMessage(), "\n";
+                }
                 ?>
-        </table>       
-    </div>
+            </table>
+        </div>
 
-    <a href="screenshots_list.php" class="button">Gestione screenshots</a>
+        <a href="screenshots_list.php" class="btn btn-secondary">Gestione screenshots</a>
 
-    <div id="screen_area" class="grid-container">
-        <?php
+        <div id="screen_area" class="grid-container">
+            <?php
             $screenshots = getScreenshotsFromVideo($pdo, $video->getPath());
-            try{
-                foreach ($screenshots as $el){
+            try {
+                foreach ($screenshots as $el) {
                     $img_name = substr($el->getPath(), strpos($el->getPath(), "/") + 1);
                     echo <<< END
-                        <div class="grid-item">
-                            <a href="screen_details.php?id={$el->getId()}">
-                                <img id="{$el->getId()}" src="../{$el->getPath()}" alt="$img_name" width="426" height="240">
-                            </a>
-                            <br>
-                            <a href="screen_details.php?id={$el->getId()}&timing_video="">
-                    END;
+                            <div class="grid-item">
+                                <a href="screen_details.php?id={$el->getId()}">
+                                    <img id="{$el->getId()}" src="../{$el->getPath()}" alt="$img_name" width="426" height="240">
+                                </a>
+                                <br>
+                                <a href="screen_details.php?id={$el->getId()}&timing_video="">
+                        END;
                     echo ($el->getName() == null) ? $img_name : $el->getName();
                     echo "</a>\n\t</div>\n";
                 }
             } catch (Exception $e) {
                 echo 'Eccezione: ',  $e->getMessage(), "\n";
             }
-        ?>
+            ?>
+        </div>
+
+        <div id="snackbar">Esiste già un segnaposto con quel minutaggio</div>
     </div>
-
-    <div id="snackbar">Esiste già un segnaposto con quel minutaggio</div>
-
 </body>
 
 </html>
@@ -167,7 +184,7 @@ setPreviusPage();
         let timing = findGetParameter("timing_screen");
         if (timing != null) {
             timing = parseFloat(timing);
-            document.getElementById("<?php echo $filename?>").currentTime = timing;
+            document.getElementById("<?php echo $filename ?>").currentTime = timing;
         }
 
         let message = findGetParameter("message");
@@ -176,7 +193,7 @@ setPreviusPage();
         }
     }
 
-    function goToTiming(video, timing){
+    function goToTiming(video, timing) {
         video.currentTime = timing;
         video.pause();
     }
