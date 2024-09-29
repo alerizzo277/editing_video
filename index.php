@@ -5,7 +5,7 @@ in questa pagina vengono settate una cosa fondamentale per il funzionamento dell
 - la persona loggata in SESSION come istanza della classse 'Person'. L'istanza verrà serializzata e ad ogni utilizzo de-serializzata
 */
 
-/* session_start();
+session_start();
 
 include "php/db_connection.php";
 include "php/functions.php";
@@ -22,7 +22,7 @@ if(!isset($_SESSION["person"])){
 else{
     //header("Location: php/" . VIDEOS_LIST);
     header("Location: php/home.php");
-} */
+}
 ?>
 
 
