@@ -27,13 +27,13 @@ include 'head.php';
         
     </head>
     <nav class="navbar navbar-dark bg-primary navbar-expand-lg">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="../index.php">
-            <img src="../assets/icon.png" width="30" height="30" class="d-inline-block align-top" alt="">
-            Editing Video
-        </a>
-    </div>
-</nav>
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../index.php">
+                <img src="../assets/icon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                Editing Video
+            </a>
+        </div>
+    </nav>
     <body>
         <!-- DA SISTEMARE <a href="<?php echo getPreviusPage()?>" class="button">Indierto</a><br>-->
         <h4 class="m-1">Tutti i segnaposti</h4>
