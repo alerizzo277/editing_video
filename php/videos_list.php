@@ -51,9 +51,9 @@ setPreviusPage();
     <body>
         <div class="container">
             <form action="<?php echo VIDEO_MANAGER;?>?operation=multiple_video_delete" method="post" onsubmit="confirm('Sicuro di eliminare i video selezionati?')">
-                <table class="table table-striped">
+                <table class="table table-hover">
                     <tr>
-                        <th>Scelta</th>
+                        <th></th>
                         <th>Nome</th>
                     </tr>
                     <?php
@@ -63,7 +63,7 @@ setPreviusPage();
                             $link = VIDEO_MANAGER . "?operation=select_video&id={$el->getId()}";
                             echo <<<END
                                     <tr class='clickable-row'>
-                                        <td><input type="checkbox" id="{$el->getId()}" name="id[]" value="{$el->getId()}"></td>        
+                                        <td data-href='$link'><input type="checkbox" id="{$el->getId()}" name="id[]" value="{$el->getId()}"></td>        
                                         <td data-href='$link'>{$el->getName()}</td>
                                     </tr>\n
                             END;
@@ -79,7 +79,7 @@ setPreviusPage();
 
 <script>
     jQuery(document).ready(function($) {
-        $(".clickable-row td:not(:first-child)").click(function() {
+        $(".clickable-row td").click(function() {
             window.location = $(this).data("href");
         });
     });

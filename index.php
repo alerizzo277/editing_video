@@ -43,7 +43,7 @@ else{
                 <img src="./assets/icon.png" width="280" height="280" class="d-inline-block align-top" alt="">
             </div>
             <div class="col-9">
-                <form class="mt-5 p-4 bg-white border rounded w-50 container" action="<?php echo "php/home.php"?>">
+                <form class="mt-5 p-4 bg-white border rounded w-50 container" action="<?php echo "php/videos_list.php"?>">
                     <div class="form-group row">
                         <div class="col">
                             <label for="email" class="col-sm-2 col-form-label">Email</label>
