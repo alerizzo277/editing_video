@@ -45,20 +45,18 @@ else{
     <script src="../js/functions.js"></script>
     <title>Dettagli Video</title>
 </head>
+
 <nav class="navbar navbar-dark bg-primary navbar-expand-lg">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="../index.php">
-                <img src="../assets/icon.png" width="30" height="30" class="d-inline-block align-top" alt="">
-                Editing Video
-            </a>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="nav nav-pills">
-                    <li class="nav-item">Dettagli Video</li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="../index.php">
+            <img src="../assets/icon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+            Editing Video
+        </a>
+    </div>
+</nav>
+
 <body>
+    <h4 class="m-2">Dettagli Video</h4>
     <div class="container mt-5">
         <video id="<?php echo $filename ?>" controls muted autoplay>
             <source src="<?php if($video != null){echo "../{$video->getPath()}";} ?>" type="video/mp4">
