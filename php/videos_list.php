@@ -49,7 +49,7 @@ setPreviusPage();
         </div>
     </nav>
     <body>
-        <div class="container">
+        <div class="container mt-5">
             <form action="<?php echo VIDEO_MANAGER;?>?operation=multiple_video_delete" method="post" onsubmit="confirm('Sicuro di eliminare i video selezionati?')">
                 <table class="table table-hover">
                     <tr>

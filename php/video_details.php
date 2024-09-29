@@ -39,94 +39,115 @@ else{
 
 <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="../css/style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="../js/functions.js"></script>
     <title>Dettagli Video</title>
-    <h1>Dettagli Video</h1>
 </head>
-
+<nav class="navbar navbar-dark bg-primary navbar-expand-lg">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="../index.php">
+                <img src="../assets/icon.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                Editing Video
+            </a>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="nav nav-pills">
+                    <li class="nav-item">Dettagli Video</li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 <body>
-    <a class="button" href="../index.php">Home</a><br>
-    <video id="<?php echo $filename ?>" controls muted autoplay>
-        <source src="<?php if($video != null){echo "../{$video->getPath()}";} ?>" type="video/mp4">
-    </video>
+    <div class="container mt-5">
+        <video id="<?php echo $filename ?>" controls muted autoplay>
+            <source src="<?php if($video != null){echo "../{$video->getPath()}";} ?>" type="video/mp4">
+        </video>
 
-    <form action="<?php echo VIDEO_MANAGER?>?operation=update_video" method="post" onsubmit="confirm('Confermi?')">
-        <fieldset>
-            <legend>Modifica Nome e Descrizione</legend>
-            <!--<input type="text" name="timing_video" id="timing_video" readonly>-->
-            <label>Nome: </label>
-            <input type="text" name="video_name" id="video_name" value="<?php if($video != null){echo $video->getName();} ?>"><br>
-            <label>Descrizione</label>
-            <textarea type="text" name="video_note" id="video_note"><?php if($video != null){echo $video->getNote();} ?></textarea>
-            <input type="submit" value="Salva">
-            <input type="submit" value="Elimina Video" formaction="<?php echo VIDEO_MANAGER?>?operation=delete_video">
-        </fieldset>
-    </form>
 
-    <br>
-    <div>
-        <a href="editing_video.php" class="button">Editing Video</a>
-        <a href="clips_list.php" class="button">Gestione clip</a>
-        <a href="marks_list.php" class="button">Gestione segnaposti</a>
-        <a href="screenshots_list.php" class="button">Gestione screenshots</a>
-        <a href="../<?php echo $video->getPath() ?>" class="button" download>Scarica</a>
-    </div>
+        <form action="<?php echo VIDEO_MANAGER?>?operation=update_video" method="post" onsubmit="confirm('Confermi?')">
+            <fieldset>
+                <legend>Modifica Nome e Descrizione</legend>
+                <div class="form-group">
+                    <label for="video_name">Nome:</label>
+                    <input type="text" class="form-control" name="video_name" id="video_name" value="<?php if($video != null){echo $video->getName();} ?>">
+                </div>
+                <div class="form-group">
+                    <label for="video_note">Descrizione:</label>
+                    <textarea class="form-control" name="video_note" id="video_note" style="resize: none;"><?php if($video != null){echo $video->getNote();} ?></textarea>
+                </div>
+                <div class="my-1">
+                    <button type="submit" class="btn btn-primary">Salva</button>
+                    <button type="submit" class="btn btn-danger" formaction="<?php echo VIDEO_MANAGER?>?operation=delete_video">Elimina Video</button>
+                </div>
+            </fieldset>
+        </form>
 
-    <button type="button" onclick="showMarks()" id="show_marks">Mostra i segnaposti</button>
-    <button type="button" onclick="showScreenArea()" id="show_screen_area">Mostra gli screenshot</button>
-    
-    <div id="marks" hidden>
-        <table id="list_marks" class="paleBlueRows">
-            <tr>
-                <th>Minutaggio</th>
-                <th>Nome</th>
-            </tr>
-                <?php
-                    $marks = getMarksFromVideo($pdo, $video->getPath());
-                    try{
-                        if ($marks != null){    
-                            foreach ($marks as $el){
-                                $name = ($el->getName() == null) ? "-" : $el->getName();
-                                echo <<< END
-                                <div id="{$el->getId()}">
-                                    <tr>
-                                        <td>{$el->getTiming()}</td>
-                                        <td>$name</td>
-                                        <td><a href="mark_details.php?id={$el->getId()}">Dettagli</a></td>
-                                END;
-                                $timing = timing_format_from_db_to_int($el->getTiming());
-                                echo "<td><a href=\"javascript:goToTiming(document.getElementById('{$filename}'), '$timing')\">Vai al Timing</a></td>\n\t</tr>\n\t</div>\n";
+        <br>
+        <div class="btn-group my-1">
+            <a class="btn btn-secondary" href="editing_video.php" class="button">Editing Video</a>
+            <a class="btn btn-secondary" href="clips_list.php" class="button">Gestione clip</a>
+            <a class="btn btn-secondary" href="marks_list.php" class="button">Gestione segnaposti</a>
+            <a class="btn btn-secondary" href="screenshots_list.php" class="button">Gestione screenshots</a>
+            <a class="btn btn-secondary" href="../<?php echo $video->getPath() ?>" class="button" download>Scarica</a>
+        </div>
+
+        <div>
+            <button class="btn btn-secondary" type="button" onclick="showMarks()" id="show_marks">Mostra i segnaposti</button>
+            <button class="btn btn-secondary" type="button" onclick="showScreenArea()" id="show_screen_area">Mostra gli screenshot</button>
+        </div>
+            
+        <div id="marks" hidden>
+            <table id="list_marks" class="paleBlueRows">
+                <tr>
+                    <th>Minutaggio</th>
+                    <th>Nome</th>
+                </tr>
+                    <?php
+                        $marks = getMarksFromVideo($pdo, $video->getPath());
+                        try{
+                            if ($marks != null){    
+                                foreach ($marks as $el){
+                                    $name = ($el->getName() == null) ? "-" : $el->getName();
+                                    echo <<< END
+                                    <div id="{$el->getId()}">
+                                        <tr>
+                                            <td>{$el->getTiming()}</td>
+                                            <td>$name</td>
+                                            <td><a href="mark_details.php?id={$el->getId()}">Dettagli</a></td>
+                                    END;
+                                    $timing = timing_format_from_db_to_int($el->getTiming());
+                                    echo "<td><a href=\"javascript:goToTiming(document.getElementById('{$filename}'), '$timing')\">Vai al Timing</a></td>\n\t</tr>\n\t</div>\n";
+                                }
                             }
+                        } catch (Exception $e) {
+                            echo 'Eccezione: ',  $e->getMessage(), "\n";
                         }
-                    } catch (Exception $e) {
-                        echo 'Eccezione: ',  $e->getMessage(), "\n";
-                    }
-                ?>
-        </table>       
-    </div>
+                    ?>
+            </table>       
+        </div>
 
-    <div id="screen_area" class="grid-container" hidden>
-        <?php
-            $screenshots = getScreenshotsFromVideo($pdo, $video->getPath());
-            try{
-                foreach ($screenshots as $el){
-                    $img_name = ($el->getName() == null) ? basename($el->getPath(), ".jpg") : $el->getName();
-                    echo <<< END
-                        <div class="grid-item">
-                            <a href="screen_details.php?id={$el->getId()}">
-                                <img id="{$el->getId()}" src="../{$el->getPath()}" alt="$img_name" width="426" height="240">
-                            </a>
-                            <br>
-                            <a href="screen_details.php?id={$el->getId()}">$img_name</a>
-                        </div>\n
-                    END;
+        <div id="screen_area" class="grid-container" hidden>
+            <?php
+                $screenshots = getScreenshotsFromVideo($pdo, $video->getPath());
+                try{
+                    foreach ($screenshots as $el){
+                        $img_name = ($el->getName() == null) ? basename($el->getPath(), ".jpg") : $el->getName();
+                        echo <<< END
+                            <div class="grid-item">
+                                <a href="screen_details.php?id={$el->getId()}">
+                                    <img id="{$el->getId()}" src="../{$el->getPath()}" alt="$img_name" width="426" height="240">
+                                </a>
+                                <br>
+                                <a href="screen_details.php?id={$el->getId()}">$img_name</a>
+                            </div>\n
+                        END;
+                    }
+                } catch (Exception $e) {
+                    echo 'Eccezione: ',  $e->getMessage(), "\n";
                 }
-            } catch (Exception $e) {
-                echo 'Eccezione: ',  $e->getMessage(), "\n";
-            }
-        ?>
+            ?>
+        </div>
     </div>
 </body>
 
