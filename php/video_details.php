@@ -15,22 +15,21 @@ setPreviusPage();
 $video = null;
 $filename = "";
 
-if(isset($_SESSION["video"])){
+if (isset($_SESSION["video"])) {
     $video = unserialize($_SESSION["video"]);
     $filename = basename($video->getPath(), ".mp4");
 } elseif (isset($_GET["video_deleted"])) {
     echo "<p class=\"message\">Video Eliminato correttamente</p>";
-} else{
+} else {
     http_response_code(404);
     include('error.php');
     die();
 }
 
-if(isset($_SESSION["person"])){
+if (isset($_SESSION["person"])) {
     $person = unserialize($_SESSION["person"]);
-}
-else{
-    header("Location: ../".INDEX);
+} else {
+    header("Location: ../" . INDEX);
 }
 ?>
 
@@ -56,27 +55,39 @@ else{
 </nav>
 
 <body>
-    <h4 class="m-2">Dettagli Video</h4>
+    <div class="m-4">
+        <h4>Dettagli Video</h4>
+        <svg onclick="history.back()" style="zoom: 2;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-circle" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8m15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-4.5-.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5z" />
+        </svg>
+    </div>
+
     <div class="container mt-5">
         <video id="<?php echo $filename ?>" controls muted autoplay>
-            <source src="<?php if($video != null){echo "../{$video->getPath()}";} ?>" type="video/mp4">
+            <source src="<?php if ($video != null) {
+                                echo "../{$video->getPath()}";
+                            } ?>" type="video/mp4">
         </video>
 
 
-        <form action="<?php echo VIDEO_MANAGER?>?operation=update_video" method="post" onsubmit="confirm('Confermi?')">
+        <form action="<?php echo VIDEO_MANAGER ?>?operation=update_video" method="post" onsubmit="confirm('Confermi?')">
             <fieldset>
                 <legend>Modifica Nome e Descrizione</legend>
                 <div class="form-group">
                     <label for="video_name">Nome:</label>
-                    <input type="text" class="form-control" name="video_name" id="video_name" value="<?php if($video != null){echo $video->getName();} ?>">
+                    <input type="text" class="form-control" name="video_name" id="video_name" value="<?php if ($video != null) {
+                                                                                                            echo $video->getName();
+                                                                                                        } ?>">
                 </div>
                 <div class="form-group">
                     <label for="video_note">Descrizione:</label>
-                    <textarea class="form-control" name="video_note" id="video_note" style="resize: none;"><?php if($video != null){echo $video->getNote();} ?></textarea>
+                    <textarea class="form-control" name="video_note" id="video_note" style="resize: none;"><?php if ($video != null) {
+                                                                                                                echo $video->getNote();
+                                                                                                            } ?></textarea>
                 </div>
                 <div class="my-1">
                     <button type="submit" class="btn btn-primary">Salva</button>
-                    <button type="submit" class="btn btn-danger" formaction="<?php echo VIDEO_MANAGER?>?operation=delete_video">Elimina Video</button>
+                    <button type="submit" class="btn btn-danger" formaction="<?php echo VIDEO_MANAGER ?>?operation=delete_video">Elimina Video</button>
                 </div>
             </fieldset>
         </form>
@@ -94,44 +105,44 @@ else{
             <button class="btn btn-secondary" type="button" onclick="showMarks()" id="show_marks">Mostra i segnaposti</button>
             <button class="btn btn-secondary" type="button" onclick="showScreenArea()" id="show_screen_area">Mostra gli screenshot</button>
         </div>
-            
+
         <div id="marks" hidden>
             <table id="list_marks" class="paleBlueRows">
                 <tr>
                     <th>Minutaggio</th>
                     <th>Nome</th>
                 </tr>
-                    <?php
-                        $marks = getMarksFromVideo($pdo, $video->getPath());
-                        try{
-                            if ($marks != null){    
-                                foreach ($marks as $el){
-                                    $name = ($el->getName() == null) ? "-" : $el->getName();
-                                    echo <<< END
+                <?php
+                $marks = getMarksFromVideo($pdo, $video->getPath());
+                try {
+                    if ($marks != null) {
+                        foreach ($marks as $el) {
+                            $name = ($el->getName() == null) ? "-" : $el->getName();
+                            echo <<< END
                                     <div id="{$el->getId()}">
                                         <tr>
                                             <td>{$el->getTiming()}</td>
                                             <td>$name</td>
                                             <td><a href="mark_details.php?id={$el->getId()}">Dettagli</a></td>
                                     END;
-                                    $timing = timing_format_from_db_to_int($el->getTiming());
-                                    echo "<td><a href=\"javascript:goToTiming(document.getElementById('{$filename}'), '$timing')\">Vai al Timing</a></td>\n\t</tr>\n\t</div>\n";
-                                }
-                            }
-                        } catch (Exception $e) {
-                            echo 'Eccezione: ',  $e->getMessage(), "\n";
+                            $timing = timing_format_from_db_to_int($el->getTiming());
+                            echo "<td><a href=\"javascript:goToTiming(document.getElementById('{$filename}'), '$timing')\">Vai al Timing</a></td>\n\t</tr>\n\t</div>\n";
                         }
-                    ?>
-            </table>       
+                    }
+                } catch (Exception $e) {
+                    echo 'Eccezione: ',  $e->getMessage(), "\n";
+                }
+                ?>
+            </table>
         </div>
 
         <div id="screen_area" class="grid-container" hidden>
             <?php
-                $screenshots = getScreenshotsFromVideo($pdo, $video->getPath());
-                try{
-                    foreach ($screenshots as $el){
-                        $img_name = ($el->getName() == null) ? basename($el->getPath(), ".jpg") : $el->getName();
-                        echo <<< END
+            $screenshots = getScreenshotsFromVideo($pdo, $video->getPath());
+            try {
+                foreach ($screenshots as $el) {
+                    $img_name = ($el->getName() == null) ? basename($el->getPath(), ".jpg") : $el->getName();
+                    echo <<< END
                             <div class="grid-item">
                                 <a href="screen_details.php?id={$el->getId()}">
                                     <img id="{$el->getId()}" src="../{$el->getPath()}" alt="$img_name" width="426" height="240">
@@ -140,10 +151,10 @@ else{
                                 <a href="screen_details.php?id={$el->getId()}">$img_name</a>
                             </div>\n
                         END;
-                    }
-                } catch (Exception $e) {
-                    echo 'Eccezione: ',  $e->getMessage(), "\n";
                 }
+            } catch (Exception $e) {
+                echo 'Eccezione: ',  $e->getMessage(), "\n";
+            }
             ?>
         </div>
     </div>
@@ -185,13 +196,12 @@ else{
         let timing = findGetParameter("timing_screen");
         if (timing != null) {
             timing = parseFloat(timing);
-            document.getElementById("<?php echo $filename?>").currentTime = timing;
+            document.getElementById("<?php echo $filename ?>").currentTime = timing;
         }
     }
 
-    function goToTiming(video, timing){
+    function goToTiming(video, timing) {
         video.currentTime = timing;
         video.pause();
     }
-
 </script>
