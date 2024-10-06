@@ -50,17 +50,17 @@ function newClip($pdo, $video, $person) {
     $clip_name = "clip_$filename"."_$start"."_$end.mp4";
 
     getClip($start_number, $end_number, $clip_name, $video);
-    $clip = new Video(null, "video/$clip_name", basename($clip_name, ".mp4"), "Clip del video{$video->getPath()}", $person->getEmail(), $video->getSession(), $video->getCamera());
+    $clip = new Video(null, "storage_video/$clip_name", basename($clip_name, ".mp4"), "Clip del video{$video->getPath()}", $person->getEmail(), $video->getSession(), $video->getCamera());
     insertNewClip($pdo, $clip, $clip->getPath());
 
     return $clip;
 }
 
 /**
- * Estrae la clip dal video; la salva nella cartrella video/
+ * Estrae la clip dal video; la salva nella cartrella storage_video/
  */
 function getClip($start, $end, $clip_name, $video){
-    $clip_path = "../video/$clip_name";
+    $clip_path = "../storage_video/$clip_name";
     try{
         $ffmpeg = FFMpeg\FFMpeg::create();
         $video = $ffmpeg->open("../{$video->getPath()}");

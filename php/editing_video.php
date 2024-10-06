@@ -52,7 +52,7 @@ setPreviusPage();
                 <input type="text" class="form-control" name="timing_video" id="timing_video" readonly>
                 <div class="input-group-append">
                     <button class="btn btn-primary" type="button" id="mark" onclick="segnaposto()">Aggiungi Segnaposto</button>
-                    <button class="btn btn-primary" type="submit">Screen</button>
+                    <input class="btn btn-primary" type="submit" value="Screen"></input>
                 </div>
             </div>
         </form>

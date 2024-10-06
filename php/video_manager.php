@@ -66,7 +66,7 @@ function update($pdo, $video, $person){
     try{
         $name = ($_POST["video_name"] == "") ? null : $_POST["video_name"];
         $note = ($_POST["video_note"] == "") ? null : $_POST["video_note"];
-        $video = new Video($video->getId(), $video->getPath(), $name, $note, $person->getEmail(), $video->getSession());
+        $video = new Video($video->getId(), $video->getPath(), $name, $note, $person->getEmail(), $video->getSession(), $video->getCamera());
         updateVideo($pdo, $video);
     } catch (Exception $e) {echo 'Eccezione: ',  $e->getMessage(), "\n";}
 }
