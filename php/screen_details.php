@@ -50,7 +50,7 @@ include 'head.php';
         if ($screen != null) {
             echo <<< END
             <div class="screen_details">
-                <img id="{$screen->getId()}" src="../{$screen->getPath()}" alt="img">
+                <img id="{$screen->getId()}" src="../{$screen->getPath()}" alt="img" class="rounded">
                 <form action="screen_manager.php?operation=update_screen&id={$screen->getId()}" method="post">
                 <fieldset>
                     <legend>Dettagli Screenshot</legend>

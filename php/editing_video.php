@@ -44,7 +44,7 @@ setPreviusPage();
         </svg>
     </div>
     <div class="container mt-5">
-        <video id="<?php echo $filename ?>" controls muted autoplay>
+        <video class="rounded" id="<?php echo $filename ?>" controls muted autoplay>
             <source src="<?php echo "../{$video->getPath()}" ?>" type="video/mp4">
         </video>
         <form action="screen_manager.php?operation=get_screen" method="post">

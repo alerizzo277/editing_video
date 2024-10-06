@@ -59,7 +59,7 @@ setPreviusPage();
                         echo <<<END
                     <tr class='clickable-row'>
                         <td><input type="checkbox" id="{$el->getId()}" name="id[]" value="{$el->getId()}"></td>
-                        <td data-href='screen_details.php?id={$el->getId()}'><img id="{$el->getId()}" src="../{$el->getPath()}" alt="img" width="128" height="96"></td>
+                        <td data-href='screen_details.php?id={$el->getId()}'><img id="{$el->getId()}" src="../{$el->getPath()}" alt="img" width="128" height="96" class="rounded"></td>
                         <td data-href='screen_details.php?id={$el->getId()}'>{$el->getName()}</td>
                         <td data-href='screen_details.php?id={$el->getId()}'>{$el->getNote()}</td>
                     </tr>\n

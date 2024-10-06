@@ -50,7 +50,7 @@ $pdo = get_connection();
     </div>
 
     <div class="container">
-        <video id="<?php echo $video->getId() ?>" controls muted autoplay>
+        <video class="rounded" id="<?php echo $video->getId() ?>" controls muted autoplay>
             <source src="<?php echo "../{$video->getPath()}"; ?>" type="video/mp4">
         </video>
 
@@ -76,7 +76,7 @@ $pdo = get_connection();
 
         <div id="clip" hidden>
             <legend>Clip Estratta</legend>
-            <video controls muted width="240" height="160">
+            <video class="rounded" controls muted width="240" height="160">
                 <?php
                 if (isset($_GET["clip"])) {
                     $id = intval($_GET["clip"]);

@@ -63,7 +63,7 @@ if (isset($_SESSION["person"])) {
     </div>
 
     <div class="container mt-5">
-        <video id="<?php echo $filename ?>" controls muted autoplay>
+        <video class="rounded" id="<?php echo $filename ?>" controls muted autoplay>
             <source src="<?php if ($video != null) {
                                 echo "../{$video->getPath()}";
                             } ?>" type="video/mp4">
@@ -145,7 +145,7 @@ if (isset($_SESSION["person"])) {
                     echo <<< END
                             <div class="grid-item">
                                 <a href="screen_details.php?id={$el->getId()}">
-                                    <img id="{$el->getId()}" src="../{$el->getPath()}" alt="$img_name" width="426" height="240">
+                                    <img id="{$el->getId()}" src="../{$el->getPath()}" alt="$img_name" width="426" height="240" class="rounded">
                                 </a>
                                 <br>
                                 <a href="screen_details.php?id={$el->getId()}">$img_name</a>

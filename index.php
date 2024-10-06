@@ -40,7 +40,7 @@ else{
     </nav>
     <div class="container d-flex justify-content-center mt-5 h-100">
             <div class="col-3">
-                <img src="./assets/icon.png" width="280" height="280" class="d-inline-block align-top" alt="">
+                <img src="./assets/icon.png" width="280" height="280" class="d-inline-block align-top rounded" alt="">
             </div>
             <div class="col-9">
                 <form class="mt-5 p-4 bg-white border rounded w-50 container" action="<?php echo "php/videos_list.php"?>">
