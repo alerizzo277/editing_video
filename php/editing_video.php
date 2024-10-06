@@ -126,30 +126,29 @@ setPreviusPage();
 
         <a href="screenshots_list.php" class="btn btn-secondary">Gestione screenshots</a>
 
-        <div id="screen_area" class="grid-container">
+        <div id="snackbar" hidden="true" class="mt-2 alert alert-danger">Esiste già un segnaposto con quel minutaggio</div>
+
+        <div id="screen_area" class="row my-1">
             <?php
             $screenshots = getScreenshotsFromVideo($pdo, $video->getPath());
             try {
                 foreach ($screenshots as $el) {
-                    $img_name = substr($el->getPath(), strpos($el->getPath(), "/") + 1);
+                    $img_name = ($el->getName() == null) ? substr($el->getPath(), strpos($el->getPath(), "/") + 1) : $el->getName();
                     echo <<< END
-                            <div class="grid-item">
+                            <div class="col m-1 p-2 bg-light rounded">
                                 <a href="screen_details.php?id={$el->getId()}">
-                                    <img id="{$el->getId()}" src="../{$el->getPath()}" alt="$img_name" width="426" height="240">
+                                    <img id="{$el->getId()}" src="../{$el->getPath()}" alt="$img_name" width="426" height="240" class="w-100 shadow-1-strong rounded mb-1">
+                                    <p class="text-center">{$img_name}</p>
                                 </a>
-                                <br>
-                                <a href="screen_details.php?id={$el->getId()}&timing_video="">
+                            </div>
                         END;
-                    echo ($el->getName() == null) ? $img_name : $el->getName();
-                    echo "</a>\n\t</div>\n";
                 }
             } catch (Exception $e) {
                 echo 'Eccezione: ',  $e->getMessage(), "\n";
             }
             ?>
         </div>
-
-        <div id="snackbar">Esiste già un segnaposto con quel minutaggio</div>
+        
     </div>
 </body>
 
