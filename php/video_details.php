@@ -136,20 +136,19 @@ if (isset($_SESSION["person"])) {
             </table>
         </div>
 
-        <div id="screen_area" class="grid-container" hidden>
+        <div id="screen_area" class="row" hidden>
             <?php
             $screenshots = getScreenshotsFromVideo($pdo, $video->getPath());
             try {
                 foreach ($screenshots as $el) {
                     $img_name = ($el->getName() == null) ? basename($el->getPath(), ".jpg") : $el->getName();
                     echo <<< END
-                            <div class="grid-item">
+                            <div class="col m-1 p-2 bg-light rounded">
                                 <a href="screen_details.php?id={$el->getId()}">
-                                    <img id="{$el->getId()}" src="../{$el->getPath()}" alt="$img_name" width="426" height="240" class="rounded">
+                                    <img id="{$el->getId()}" src="../{$el->getPath()}" alt="$img_name" width="426" height="240" class="w-100 shadow-1-strong rounded mb-1">
+                                    <p class="text-center">{$img_name}</p>
                                 </a>
-                                <br>
-                                <a href="screen_details.php?id={$el->getId()}">$img_name</a>
-                            </div>\n
+                            </div>
                         END;
                 }
             } catch (Exception $e) {
